@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import bean Subject
-import bean School;
+import bean.Subject;
+import bean.School;
 
-public class Subject extends Dao{
-	public Subject get(cd String, School school)throws Exception {
+public class SubjectDao extends Dao{
+	public Subject get(String cd, School school)throws Exception {
 		// クラス番号インスタンスを初期化
 		Subject subject = new Subject();
 		// データベースへのコネクションを確立
@@ -163,7 +163,7 @@ public class Subject extends Dao{
 	}
 
 
-	public boolean save(Subject subject) throws Exception{
+	public boolean delete(Subject subject) throws Exception{
 		// コネクションを確立
 				Connection connection = getConnection();
 				// プリペアードステートメント

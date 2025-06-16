@@ -41,6 +41,8 @@ public class TestDao extends Dao {
 				test.setStudent(resultSet.getString("student"));
 				// 学生フィールドには学校コードで検索した学校インスタンスをセット
 				student.setSchool(schoolDao.get(resultSet.getString("school_cd")));
+
+
 			} else {
 				// リザルトセットが存在しない場合
 				// 学生インスタンスにnullをセット

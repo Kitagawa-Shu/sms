@@ -11,7 +11,7 @@ import dao.ClassNumDao;
 import dao.StudentDao;
 import tool.Action;
 
-public class SubjectCreateAction extends Action {
+public class SubjectListAction extends Action {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {

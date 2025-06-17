@@ -3,241 +3,115 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import bean.Subject;
 import bean.School;
+import bean.Subject;
 
-public class SubjectDao extends Dao{
-	public Subject get(String cd, School school)throws Exception {
-		// クラス番号インスタンスを初期化
-		Subject subject = new Subject();
-		// データベースへのコネクションを確立
-		Connection connection = getConnection();
-		// プリペアードステートメント
-		PreparedStatement statement = null;
+public class SubjectDao extends Dao {
 
-		try {
-			// プリペアードステートメントにSQL文をセット
-			statement = connection.prepareStatement("select * from subject where subject = ? and school_cd = ?");
-			// プリペアードステートメントに値をバインド
-			statement.setString(1, subject);
-			statement.setString(2, school.getCd());
-			// プリペアードステートメントを実行
-			ResultSet rSet = statement.executeQuery();
+    /**
+     * 主キーによる検索
+     */
+    public Subject get(String cd, School school) throws Exception {
+        Subject subject = null;
 
-			// 学校Daoを初期化
-			SchoolDao sDao = new SchoolDao();
+        Connection con = getConnection();
 
-			if (rSet.next()) {
-				// リザルトセットが存在する場合
-				// クラス番号インスタンスに検索結果をセット
-				subject.setSubject(rSet.getString("subject"));
-				subject.setSchool(sDao.get(rSet.getString("school_cd")));
-			} else {
-				// リザルトセットが存在しない場合
-				// クラス番号インスタンスにnullをセット
-				subject = null;
-			}
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			// プリペアードステートメントを閉じる
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException sqle) {
-					throw sqle;
-				}
-			}
-			// コネクションを閉じる
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException sqle) {
-					throw sqle;
-				}
-			}
-		}
+        PreparedStatement st = con.prepareStatement(
+            "SELECT * FROM subject WHERE cd = ? AND school_cd = ?");
+        st.setString(1, cd);
+        st.setString(2, school.getCd());
+        ResultSet rs = st.executeQuery();
 
-		return subject;
-	}
+        if (rs.next()) {
+            subject = new Subject();
+            subject.setCd(rs.getString("cd"));
+            subject.setName(rs.getString("name"));
+            subject.setSchool(school);
+        }
 
+        st.close();
+        con.close();
+        return subject;
+    }
 
-	public List<Subject> filter(School school) throws Exception{
-		// リストを初期化
-				List<String> list = new ArrayList<>();
-				// データベースへのコネクションを確立
-				Connection connection = getConnection();
-				// プリペアードステートメント
-				PreparedStatement statement = null;
+    /**
+     * 学校単位の一覧取得
+     */
+    public List<Subject> filter(School school) throws Exception {
+        List<Subject> list = new ArrayList<>();
 
-				try {
-					// プリペアードステートメントにSQL文をセット
-					statement = connection
-							.prepareStatement("select subject from subject where school_cd=? order by subject");
-					// プリペアードステートメントに学校コードをバインド
-					statement.setString(1, school.getCd());
-					// プリペアードステートメントを実行
-					ResultSet rSet = statement.executeQuery();
+        Connection con = getConnection();
 
-					// リザルトセットを全件走査
-					while (rSet.next()) {
-						// リストに科目番号を追加
-						list.add(rSet.getString("subject"));
-					}
-				} catch (Exception e) {
-					throw e;
-				} finally {
-					// プリペアードステートメントを閉じる
-					if (statement != null) {
-						try {
-							statement.close();
-						} catch (SQLException sqle) {
-							throw sqle;
-						}
-					}
-					// コネクションを閉じる
-					if (connection != null) {
-						try {
-							connection.close();
-						} catch (SQLException sqle) {
-							throw sqle;
-						}
-					}
-				}
+        PreparedStatement st = con.prepareStatement(
+            "SELECT * FROM subject WHERE school_cd = ? ORDER BY cd");
+        st.setString(1, school.getCd());
+        ResultSet rs = st.executeQuery();
 
-				return list;
-	}
+        while (rs.next()) {
+            Subject subject = new Subject();
+            subject.setCd(rs.getString("cd"));
+            subject.setName(rs.getString("name"));
+            subject.setSchool(school);
+            list.add(subject);
+        }
 
+        st.close();
+        con.close();
+        return list;
+    }
 
-	public boolean save(Subject subject) throws Exception{
+    /**
+     * 登録・更新処理
+     */
+    public boolean save(Subject subject) throws Exception {
+        Connection con = getConnection();
 
-		// コネクションを確立
-				Connection connection = getConnection();
-				// プリペアードステートメント
-				PreparedStatement statement = null;
-				// 実行件数
-				int count = 0;
+        // 主キー存在確認
+        PreparedStatement st = con.prepareStatement(
+            "SELECT COUNT(*) FROM subject WHERE cd = ? AND school_cd = ?");
+        st.setString(1, subject.getCd());
+        st.setString(2, subject.getSchool().getCd());
+        ResultSet rs = st.executeQuery();
+        rs.next();
+        int count = rs.getInt(1);
+        st.close();
 
-				try {
-					// プリペアードステートメントにINSERT文をセット
-					statement = connection.prepareStatement("insert into subject(school_cd, subject) values(?, ?)");
-					// プリペアードステートメントに値をバインド
-					statement.setString(1, subject.getSchool().getCd());
-					statement.setString(2, subject.getSubject());
-					// プリペアードステートメントを実行
-					count = statement.executeUpdate();
-				} catch (Exception e) {
-					throw e;
-				} finally {
-					// プリペアードステートメントを閉じる
-					if (statement != null) {
-						try {
-							statement.close();
-						} catch (SQLException sqle) {
-							throw sqle;
-						}
-					}
-					// コネクションを閉じる
-					if (connection != null) {
-						try {
-							connection.close();
-						} catch (SQLException sqle) {
-							throw sqle;
-						}
-					}
-				}
+        if (count == 0) {
+            // INSERT
+            st = con.prepareStatement(
+                "INSERT INTO subject (cd, name, school_cd) VALUES (?, ?, ?)");
+        } else {
+            // UPDATE
+            st = con.prepareStatement(
+                "UPDATE subject SET name = ? WHERE cd = ? AND school_cd = ?");
+        }
 
-				if (count > 0) {
-					// 実行件数が1件以上ある場合
-					return true;
-				} else {
-					// 実行件数が0件の場合
-					return false;
-				}
-			}
+        st.setString(1, subject.getCd());
+        st.setString(2, subject.getName());
+        st.setString(3, subject.getSchool().getCd());
+        int result = st.executeUpdate();
+        st.close();
+        con.close();
+        return result > 0;
+    }
 
-	}
+    /**
+     * 削除処理
+     */
+    public boolean delete(Subject subject) throws Exception {
+        Connection con = getConnection();
 
+        PreparedStatement st = con.prepareStatement(
+            "DELETE FROM subject WHERE cd = ? AND school_cd = ?");
+        st.setString(1, subject.getCd());
+        st.setString(2, subject.getSchool().getCd());
+        int result = st.executeUpdate();
 
-	public boolean delete(Subject subject) throws Exception{
-		// コネクションを確立
-				Connection connection = getConnection();
-				// プリペアードステートメント
-				PreparedStatement statement = null;
-				// 実行件数
-				int count = 0;
-
-				try {
-					// プリペアードステートメントにUPDATE文をセット
-					statement = connection.prepareStatement("update subject set subject = ? where school_cd = ? and subject = ?");
-					statement.setString(1, newSubject);
-					statement.setString(2, subject.getSchool().getCd());
-					statement.setString(3, subject.getSubject());
-					// プリペアードステートメントを実行
-					count += statement.executeUpdate();
-					// プリペアードステートメントを閉じる
-					if (statement != null) {
-						try {
-							statement.close();
-						} catch (SQLException sqle) {
-							throw sqle;
-						}
-					}
-
-					// 登録されている学生のクラスも変更
-					statement = connection.prepareStatement("update student set subject = ? where school_cd = ? and subject = ?");
-					statement.setString(1, newSubject);
-					statement.setString(2, subject.getSchool().getCd());
-					statement.setString(3, subject.getSubject());
-					count += statement.executeUpdate();
-					// プリペアードステートメントを閉じる
-					if (statement != null) {
-						try {
-							statement.close();
-						} catch (SQLException sqle) {
-							throw sqle;
-						}
-					}
-
-					// テストに登録されているクラスも変更
-					statement = connection.prepareStatement("update test set subject = ? where school_cd = ? and subject = ?");
-					statement.setString(1, newSubject);
-					statement.setString(2, subject.getSchool().getCd());
-					statement.setString(3, subject.getSubject());
-					count += statement.executeUpdate();
-
-				} catch (Exception e) {
-					throw e;
-				} finally {
-					// プリペアードステートメントを閉じる
-					if (statement != null) {
-						try {
-							statement.close();
-						} catch (SQLException sqle) {
-							throw sqle;
-						}
-					}
-					// コネクションを閉じる
-					if (connection != null) {
-						try {
-							connection.close();
-						} catch (SQLException sqle) {
-							throw sqle;
-						}
-					}
-				}
-
-				if (count > 3) {
-					// 実行件数が3件以上ある場合
-					return true;
-				} else {
-					// 実行件数が3件未満の場合
-					return false;
-				}
-			}
-	}
+        st.close();
+        con.close();
+        return result > 0;
+    }
 }

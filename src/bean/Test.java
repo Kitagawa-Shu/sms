@@ -33,6 +33,7 @@ public class Test implements Serializable {
 	 * クラス名:point
 	 */
 	private int point;
+	//getter setter
 
 	public Student getStudent() {
 		return student;

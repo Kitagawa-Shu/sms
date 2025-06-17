@@ -12,7 +12,7 @@ public class Test implements Serializable {
 	/**
 	 * クラス名:classNum
 	 */
-	private String String;
+	private String classNum;
 
 	/**
 	 * クラス名:subject
@@ -42,12 +42,12 @@ public class Test implements Serializable {
 		this.student = student;
 	}
 
-	public String getString() {
-		return String;
+	public String getClassNum() {
+		return classNum;
 	}
 
-	public void setString(String string) {
-		String = string;
+	public void setClassNum(String classNum) {
+		this.classNum = classNum;
 	}
 
 	public Subject getSubject() {
@@ -84,3 +84,5 @@ public class Test implements Serializable {
 
 
 }
+
+

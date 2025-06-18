@@ -1,14 +1,17 @@
-package bean;
+package scoremanager.main;
 
 import java.util.List;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import bean.Subject;
+import bean.Teacher;
 import dao.ClassNumDao;
 import dao.StudentDao;
+import dao.SubjectDao;
+import dao.TeacherDao;
 import tool.Action;
 
 public class SubjectListAction extends Action {
@@ -26,29 +29,15 @@ public class SubjectListAction extends Action {
         Subject subjects = new Subject();
         StudentDao studentDao = new StudentDao();
         ClassNumDao classNumDao = new ClassNumDao();
-
-        // パラメータ取得
-        subject_cd = req.getParameter("cd");
-
-
-        subject = SubjectDao.get(subject_cd);
-
-
-        List<String> class_num_set = classNumDao.filter(teacher.getSchool());
+        SubjectDao  subjectDao = new SubjectDao();
+        TeacherDao teacherDao = new TeacherDao();
 
 
 
-        subject_cd = subject_cd.getCd());
-        subject_name = subject_name.getName();
+        List<Subject> subjectList = subjectDao.filter(teacher.getSchool());
 
+        req.setAttribute("subjects", subjectList);
 
-
-        req.setAttribute("cd", subject_cd);
-        req.setAttribute("name", subject_name);
-        req.setAttribute("class_num", class_num);
-        req.setAttribute("is_attend", isAttend);
-
-        req.setAttribute("class_num_set", class_num_set);
 
         req.getRequestDispatcher("subject_list.jsp").forward(req, res);
     }

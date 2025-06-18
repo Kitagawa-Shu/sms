@@ -9,9 +9,7 @@
 	<c:param name="content">
 		<section class="me-4">
 			<h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">科目情報登録</h2>
-			<div class="my-2 text-end px-4">
-				<a href="SubjectCreate.action">新規登録</a>
-			</div>
+
 
 			<c:choose>
 				<c:when test="true">
@@ -20,8 +18,9 @@
 						<label>
 							<tr>
 								<th>科目コード</th>
+								text = input(subject_cd)
 							</tr>
-							<c:set var="message" value="こんにちは、世界！" />
+							<c:set var="message" value="" />
 							<p>${message}</p>
 
 						</label>
@@ -35,6 +34,7 @@
 					</table>
 				</c:when>
 			</c:choose>
+			<a href="StudentList.action">戻る</a>
 		</section>
 	</c:param>
 </c:import>

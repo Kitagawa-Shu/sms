@@ -18,7 +18,7 @@
 
 			<c:choose>
 				<c:when test="${subjects.size()>0 }">
-					<div>検索結果：${students.size() }件</div>
+
 					<table class="table table-hover">
 						<tr>
 							<th>科目コード</th>
@@ -31,7 +31,8 @@
 								<td>${subjects.name }</td>
 								<td>${subjects.school }</td>
 								<td class="text-center"></td>
-								<td><a href="SubjectCreatAction?no=${subjects.no }">変更</a></td>
+								<td><a href="SubjectCreatAction?no=${subjects.cd }">変更</a></td>
+								<td><a href="SubjectCreatAction?no=${subjects.cd}">削除</a></td>
 							</tr>
 						</c:forEach>
 					</table>

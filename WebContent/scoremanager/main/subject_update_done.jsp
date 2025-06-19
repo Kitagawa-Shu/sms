@@ -15,7 +15,7 @@
 				<br>
 				<br>
 				<br>
-				<a href="SubjectList.action">科目一覧</a>
+				<a href="SubjectUpdate.action">科目一覧</a>
 			</div>
 		</div>
 	</c:param>

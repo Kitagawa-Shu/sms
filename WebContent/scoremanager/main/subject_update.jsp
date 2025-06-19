@@ -50,7 +50,7 @@
       </form>
 
       <!-- 画面設計書⑦ -->
-      <a href="StudentList.action">戻る</a>
+      <a href="SubjectUpdate.action">戻る</a>
     </section>
   </c:param>
 </c:import>

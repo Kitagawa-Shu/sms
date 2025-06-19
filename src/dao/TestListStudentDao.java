@@ -13,9 +13,9 @@ import bean.TestListStudent;
 public class TestListStudentDao {
 
     // データベース接続情報（自分の環境にあわせて書き換えてください）
-    private static final String URL = "jdbc:h2:tcp://localhost/~/exam"; // 例: school_db
-    private static final String USER = "sa"; // 例: root
-    private static final String PASSWORD = ""; // 例: password
+    private static final String URL = "jdbc:h2:tcp://localhost/~/exam";
+    private static final String USER = "sa";
+    private static final String PASSWORD = "";
 
     // JDBCドライバの読み込み（初回実行時に一度だけ）
     static {
@@ -46,13 +46,12 @@ public class TestListStudentDao {
     public List<TestListStudent> filter(Student student) throws Exception {
         List<TestListStudent> list;
 
-        String sql = """
-            SELECT s.name AS subject_name, s.cd AS subject_cd, t.num, t.point
-            FROM test AS t
-            JOIN subject AS s ON t.subject_cd = s.cd
-            WHERE t.student_no = ?
-            ORDER BY s.cd, t.num
-        """;
+        String sql =
+            "SELECT s.name AS subject_name, s.cd AS subject_cd, t.num, t.point"+
+            "FROM test AS t"+
+            "JOIN subject AS s ON t.subject_cd = s.cd"+
+            "WHERE t.student_no = ?"+
+            "ORDER BY s.cd, t.num";
 
         try (
             Connection con = DriverManager.getConnection(URL, USER, PASSWORD);

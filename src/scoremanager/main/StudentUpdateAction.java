@@ -60,6 +60,6 @@ public class StudentUpdateAction extends Action {
 
 		// JSPへフォワード 7
 		req.getRequestDispatcher("student_update.jsp").forward(req, res);
-	}
+	} 
 
 }

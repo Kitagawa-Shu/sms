@@ -78,6 +78,7 @@
 							<th>クラス</th>
 							<th>点数</th>
 							<th></th>
+							<th></th>
 						</tr>
 						<c:forEach var="student" items="${students }">
 							<tr>
@@ -104,7 +105,6 @@
 				</c:otherwise>
 
 			</c:choose>
-
 		</section>
 	</c:param>
 </c:import>

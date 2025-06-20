@@ -83,8 +83,9 @@
    </form>
 
    <c:choose>
-				<c:when test="${students.size()>0 }">
+				<c:when test="${studentList.size()>0 }">
 					<div>科目：${subject } (${timesnum })</div>
+
 					<table class="table table-hover">
 						<tr>
 							<th>入学年度</th>
@@ -94,32 +95,23 @@
 							<th>1回</th>
 							<th>2回</th>
 						</tr>
-						<c:forEach var="student" items="${students }">
+
+						<c:forEach var="student" items="${studentList }">
 							<tr>
 								<td>${student.entYear }</td>
 								<td>${student.no }</td>
-								<td>${student.name }</td>
 								<td>${student.classNum }</td>
+								<td>${student.name }</td>
 								<td>${student.one }</td>
 								<td>${student.two }</td>
 							</tr>
-							<div class="mt-2 text-warning">${errors.get("1") }</div>
-							<div>
-								<input class="form-control" type="text" id="point" name="point_${test.student.no}" value="${test.point}"/>
-							</div>
 						</c:forEach>
 					</table>
-
-					<div class="col-2 text-center">
-						<button class="btn btn-secondary" id="filter-button">登録して終了</button>
-					</div>
-
 				</c:when>
 
 				<c:otherwise>
 					<div>学生情報が存在しませんでした。</div>
 				</c:otherwise>
-
 			</c:choose>
   </section>
  </c:param>

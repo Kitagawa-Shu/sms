@@ -14,8 +14,8 @@ public class TestRegistAction extends Action {
 
 		HttpSession session = req.getSession();
 		Teacher teacher = (Teacher)session.getAttribute("user");
-		
-		
+
+
 
 		req.getRequestDispatcher("test_regist.jsp").forward(req, res);
 	}

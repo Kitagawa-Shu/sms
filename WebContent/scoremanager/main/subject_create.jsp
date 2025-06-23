@@ -12,7 +12,7 @@
 	<c:param name="content">
 		<section>
 			<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">科目情報登録</h2>
-			<form action="StudentCreate.action" method="get">
+			<form action="SubjectCreateExecute.action" method="get">
 
 
 				<div class="mt-2 text-warning">${errors.get("1") }</div>
@@ -30,7 +30,7 @@
 					<button class="btn btn-secondary" id="create-button" name="end">登録して終了</button>
 				</div>
 			</form>
-			<a href="SubjectCreateAction">戻る</a>
+			<a href="SubjectCreate.action">戻る</a>
 		</section>
 	</c:param>
 </c:import>

@@ -4,7 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import bean.Subject;
 import bean.Teacher;
+import dao.SubjectDao;
 import tool.Action;
 
 public class SubjectCreateExecuteAction extends Action {
@@ -12,44 +14,38 @@ public class SubjectCreateExecuteAction extends Action {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
+        // セッションからログイン中の教員情報を取得
         HttpSession session = req.getSession();
         Teacher teacher = (Teacher) session.getAttribute("user");
 
-//        String subject_cd = req.getParameter("cd");
-//        String subject_name = "";
-//        String subject_shool = "";
-//        String class_num = req.getParameter("class_num");
-//        boolean isAttend = true;
-//
-//
-//
-//        StudentDao studentDao = new StudentDao();
-//        ClassNumDao classNumDao = new ClassNumDao();
-//        SubjectDao subjectDao = new SubjectDao();
-//
-//
-//        Subject subject = subjectDao.get(subject_cd, teacher.getSchool());
-//        if (subject == null) {
-//            req.setAttribute("error", "科目が見つかりません。");
-//            req.getRequestDispatcher("error.jsp").forward(req, res);
-//            return;
-//        }
-//
-//
-//        List<String> class_num_set = classNumDao.filter(teacher.getSchool());
-//
-//
-//        subject_cd = subject.getCd();
-//        subject_name = subject.getName();
-//
-//        req.setAttribute("cd", subject_cd);
-//        req.setAttribute("name", subject_name);
-//        req.setAttribute("class_num", class_num);
-//        req.setAttribute("is_attend", isAttend);
-//        req.setAttribute("class_num_set", class_num_set);
-//        req.setAttribute("school", subject_shool);
+        // リクエストパラメータ（科目コードとクラス名）を取得
+        String subject_cd = req.getParameter("cd");
+        String class_name = req.getParameter("class_name");
 
+        // DAOの生成
+        SubjectDao subjectDao = new SubjectDao();
 
+        // 該当の科目情報を取得（存在すれば編集、なければ新規）
+        Subject subject = null;
+        if (subject_cd != null && !subject_cd.isEmpty()) {
+            subject = subjectDao.get(subject_cd, teacher.getSchool());
+        }
+
+        // 科目情報を画面に渡す
+        if (subject != null) {
+            req.setAttribute("cd", subject.getCd());
+            req.setAttribute("name", subject.getName());
+            req.setAttribute("school", subject.getSchool());
+        } else {
+            req.setAttribute("cd", "");
+            req.setAttribute("name", "");
+            req.setAttribute("school", teacher.getSchool());
+        }
+
+        // クラス名も渡す（必要なら）
+        req.setAttribute("class_name", class_name);
+
+        // 科目登録画面へフォワード
         req.getRequestDispatcher("subject_create.jsp").forward(req, res);
     }
 }

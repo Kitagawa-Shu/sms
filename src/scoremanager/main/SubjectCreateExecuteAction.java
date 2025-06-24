@@ -11,7 +11,8 @@ import tool.Action;
 
 public class SubjectCreateExecuteAction extends Action {
 
-    @Override
+    @SuppressWarnings("null")
+	@Override
     public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
         // セッションからログイン中の教員情報を取得
@@ -28,7 +29,12 @@ public class SubjectCreateExecuteAction extends Action {
         // 該当の科目情報を取得（存在すれば編集、なければ新規）
         Subject subject = null;
         if (subject_cd != null && !subject_cd.isEmpty()) {
-            subject = subjectDao.get(subject_cd, teacher.getSchool());
+        	subject.setCd(subject_cd);
+			subject.setName(class_name);
+			subject.setSchool(teacher.getSchool());
+
+			// saveメソッドで情報を登録
+			subjectDao.save(subject);
         }
 
         // 科目情報を画面に渡す
@@ -39,13 +45,14 @@ public class SubjectCreateExecuteAction extends Action {
         } else {
             req.setAttribute("cd", "");
             req.setAttribute("name", "");
-            req.setAttribute("school", teacher.getSchool());
+
         }
 
         // クラス名も渡す（必要なら）
+        req.setAttribute("subject_cd", subject_cd);
         req.setAttribute("class_name", class_name);
 
         // 科目登録画面へフォワード
-        req.getRequestDispatcher("subject_create.jsp").forward(req, res);
+        req.getRequestDispatcher("subject_create_done.jsp").forward(req, res);
     }
 }

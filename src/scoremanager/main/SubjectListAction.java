@@ -32,7 +32,7 @@ public class SubjectListAction extends Action {
         SubjectDao  subjectDao = new SubjectDao();
         TeacherDao teacherDao = new TeacherDao();
 
-
+        System.out.println("debug:" + subjectDao.filter(teacher.getSchool()));
 
         List<Subject> subjectList = subjectDao.filter(teacher.getSchool());
 

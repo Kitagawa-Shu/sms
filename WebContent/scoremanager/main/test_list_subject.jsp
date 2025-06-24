@@ -1,4 +1,4 @@
-<%-- 成績参照検索 --%>
+<%-- 科目別成績一覧 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
  pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -46,7 +46,7 @@
 	    	<label class="form-label" for="student-f3-select">科目</label>
 	    	<select class="form-select" id="student-f3-select" name="f3">
 	       		<option value="0">--------</option>
-				    <c:forEach var="num" items="${subject_set }">
+				    <c:forEach var="subject" items="${subject_set }">
 					    <%-- 現在のnumと選択されていたf2が一致していた場合selectedを追記 --%>
 					    <option value="${subject }" <c:if test="${subject==f3 }">selected</c:if>>${subject }</option>
 				    </c:forEach>
@@ -66,13 +66,13 @@
 	    </div>
 
 	    <div class="col-4">
-	    <label class="form-label" for="student-f4-select">学生番号</label>
-	    <input class="form-control" type="text" id="name" name="name"value="${name}" required maxlength="10" placeholder="学生番号を入力してください" />
-	       <c:forEach var="num" items="${student_num_set }">
-		       <%-- 現在のnumと選択されていたf4が一致していた場合selectedを追記 --%>
-		       <option value="${num }" <c:if test="${num==f4 }">selected</c:if>>${num }</option>
-	       </c:forEach>
-	    </div>
+      <label class="form-label" for="student-f4-select">学生番号</label>
+      <input class="form-control" type="text" name="f4" value="${f4}" required maxlength="10" placeholder="学生番号を入力してください" />
+       <c:forEach var="num" items="${student_num_set }">
+        <%-- 現在のnumと選択されていたf4が一致していた場合selectedを追記 --%>
+        <option value="${num } }" <c:if test="${num==f4 }">selected</c:if>>${num }</option>
+       </c:forEach>
+     </div>
 
 
 			<div class="col-2 text-center">

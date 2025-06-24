@@ -66,13 +66,13 @@
 	    </div>
 
 	    <div class="col-4">
-	    <label class="form-label" for="student-f4-select">学生番号</label>
-	    <input class="form-control" type="text" id="name" name="name"value="${name}" required maxlength="10" placeholder="学生番号を入力してください" />
-	       <c:forEach var="num" items="${student_num_set }">
-		       <%-- 現在のnumと選択されていたf4が一致していた場合selectedを追記 --%>
-		       <option value="${num }" <c:if test="${num==f4 }">selected</c:if>>${num }</option>
-	       </c:forEach>
-	    </div>
+      <label class="form-label" for="student-f4-select">学生番号</label>
+      <input class="form-control" type="text" name="f4" value="${f4}" required maxlength="10" placeholder="学生番号を入力してください" />
+       <c:forEach var="num" items="${student_num_set }">
+        <%-- 現在のnumと選択されていたf4が一致していた場合selectedを追記 --%>
+        <option value="${num } }" <c:if test="${num==f4 }">selected</c:if>>${num }</option>
+       </c:forEach>
+     </div>
 
 
 			<div class="col-2 text-center">

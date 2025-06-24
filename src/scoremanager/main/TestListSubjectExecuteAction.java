@@ -1,14 +1,17 @@
 package scoremanager.main;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import bean.School;
+import bean.Subject;
 import bean.Teacher;
-import dao.SubjectDao;
+import dao.TestListSubjectDao;
 import tool.Action;
 
 public class TestListSubjectExecuteAction extends Action {
@@ -53,8 +56,12 @@ public class TestListSubjectExecuteAction extends Action {
 		/*
 		 * 入力された入学年度、クラス、科目の成績データを取得する(DAOを使用する)
 		 */
-		SubjectDao subjectDao = new SubjectDao();
-		List<Subject> subject_list = subjectDao.filter(school);
+		Subject subject = new Subject();
+		
+		School school = teacher.getSchool();
+		
+		TestListSubjectDao testListSubjectDao = new TestListSubjectDao();
+		List<Subject> subject_list = testListSubjectDao.filter(entYear,classNum,subject,school);
         req.setAttribute("subject_list", subject_list);
 
 

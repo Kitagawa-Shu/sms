@@ -2,6 +2,7 @@ package scoremanager.main;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,14 +26,25 @@ public class TestRegistAction extends Action {
 		Teacher teacher = (Teacher)session.getAttribute("user");
 
 		// ローカル変数の定義
+		String entYearStr = "";
+		String classNum = "";
+		String subjectStr = "";
+		String timesNumSer = "";
+		int entYear = 0;
+
 		ClassNumDao classNumDao = new ClassNumDao();
+		SubjectDao subjectDao = new SubjectDao();
 		TestDao testDao = new TestDao();
-		SubjectDao subjectDao = new SubjectDao(); // ← 科目用DAOを初期化
 		Test test = new Test();
 		LocalDate todaysDate = LocalDate.now();
 		int year = todaysDate.getYear();
 
-		// リクエストパラメーターの取得（※不要なら省略）
+		// リクエストパラメーターの取得
+		entYearStr = req.getParameter("f1");
+		classNum = req.getParameter("f2");
+		subjectStr = req.getParameter("f3");
+		timesNumSer = req.getParameter("f4");
+
 
 		// 学校コードからクラス番号の一覧を取得
 		List<String> list = classNumDao.filter(teacher.getSchool());
@@ -47,13 +59,26 @@ public class TestRegistAction extends Action {
 		List<Subject> subjectList = subjectDao.filter(teacher.getSchool());
 
 		// ★ テスト回数リスト
+		List<Integer> testNumList = Arrays.asList(1, 2);
 
+
+		if (entYearStr != null) {
+			// 数値に変換
+			entYear = Integer.parseInt(entYearStr);
+		}
+
+
+
+		req.setAttribute("f1", entYearStr);
+		req.setAttribute("f2", classNum);
+		req.setAttribute("f3", subjectStr);
+		req.setAttribute("f4", timesNumSer);
 
 		// JSPに渡すデータをセット
 		req.setAttribute("class_num_set", list);
 		req.setAttribute("ent_year_set", entYearSet);
 		req.setAttribute("subject_set", subjectList); // ★ 科目一覧
-		req.setAttribute("times_num_set", null);     // ★ テスト回数
+		req.setAttribute("times_num_set", testNumList);     // ★ テスト回数
 
 		req.getRequestDispatcher("test_regist.jsp").forward(req, res);
 	}

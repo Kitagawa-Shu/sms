@@ -21,16 +21,16 @@ public class SubjectCreateExecuteAction extends Action {
 
         // リクエストパラメータ（科目コードとクラス名）を取得
         String subject_cd = req.getParameter("cd");
-        String class_name = req.getParameter("class_name");
+        String subject_name = req.getParameter("name");
 
         // DAOの生成
         SubjectDao subjectDao = new SubjectDao();
 
         // 該当の科目情報を取得（存在すれば編集、なければ新規）
-        Subject subject = null;
+        Subject subject = new Subject();
         if (subject_cd != null && !subject_cd.isEmpty()) {
         	subject.setCd(subject_cd);
-			subject.setName(class_name);
+			subject.setName(subject_name);
 			subject.setSchool(teacher.getSchool());
 
 			// saveメソッドで情報を登録
@@ -49,8 +49,8 @@ public class SubjectCreateExecuteAction extends Action {
         }
 
         // クラス名も渡す（必要なら）
-        req.setAttribute("subject_cd", subject_cd);
-        req.setAttribute("class_name", class_name);
+        req.setAttribute("cd", subject_cd);
+        req.setAttribute("name", subject_name);
 
         // 科目登録画面へフォワード
         req.getRequestDispatcher("subject_create_done.jsp").forward(req, res);

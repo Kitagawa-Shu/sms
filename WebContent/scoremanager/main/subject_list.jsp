@@ -29,10 +29,9 @@
 							<tr>
 								<td>${subjects.cd }</td>
 								<td>${subjects.name }</td>
-								<td>${subjects.school }</td>
 								<td class="text-center"></td>
-								<td><a href="SubjectCreatAction?no=${subjects.cd }">変更</a></td>
-								<td><a href="SubjectCreatAction?no=${subjects.cd}">削除</a></td>
+								<td><a href="SubjectCreate.action?cd=${subjects.cd }">変更</a></td>
+								<td><a href="SubjectCreate.action?cd=${subjects.cd}">削除</a></td>
 							</tr>
 						</c:forEach>
 					</table>

@@ -75,10 +75,10 @@ public class TestListAction extends Action {
         req.setAttribute("f3", subject_cd);
         req.setAttribute("f4", student_no);
 
-        // 成績リストをセット（JSPで取り扱いやすいように）
+        // 成績リストをセット
         req.setAttribute("test_list_student", test_list);
 
-        // JSPへフォワード
+
         req.getRequestDispatcher("test_list_student.jsp").forward(req, res);
     }
 }

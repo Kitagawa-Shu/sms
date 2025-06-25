@@ -42,9 +42,9 @@
 						<label class="form-label" for="student-f3-select">科目</label>
 						<select class="form-select" id="student-f3-select" name="f3">
 							<option value="0">--------</option>
-							<c:forEach var="num" items="${subject_set }">
+							<c:forEach var="subject" items="${subject_set }">
 								<%-- 現在のnumと選択されていたf2が一致していた場合selectedを追記 --%>
-								<option value="${subject }" <c:if test="${subject==f3 }">selected</c:if>>${subject }</option>
+								<option value="${subject.name }" <c:if test="${subject.name==f3 }">selected</c:if>>${subject.name }</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -53,7 +53,7 @@
 						<label class="form-label" for="student-f4-select">回数</label>
 						<select class="form-select" id="student-f4-select" name="f4">
 							<option value="0">--------</option>
-							<c:forEach var="num" items="${times_num_set }">
+							<c:forEach var="timesnum" items="${times_num_set }">
 								<%-- 現在のnumと選択されていたf2が一致していた場合selectedを追記 --%>
 								<option value="${timesnum }" <c:if test="${timesnum==f4 }">selected</c:if>>${timesnum }</option>
 							</c:forEach>
@@ -66,16 +66,15 @@
 
 				</div>
 			</form>
-
 			<c:choose>
 				<c:when test="${students.size()>0 }">
-					<div>科目：${subject } (${timesnum })</div>
+					<div>科目：${subject.name } (${timesnum })</div>
 					<table class="table table-hover">
 						<tr>
 							<th>入学年度</th>
+							<th>クラス</th>
 							<th>学生番号</th>
 							<th>氏名</th>
-							<th>クラス</th>
 							<th>点数</th>
 							<th></th>
 							<th></th>
@@ -83,9 +82,9 @@
 						<c:forEach var="student" items="${students }">
 							<tr>
 								<td>${student.entYear }</td>
+								<td>${student.classNum }</td>
 								<td>${student.no }</td>
 								<td>${student.name }</td>
-								<td>${student.classNum }</td>
 							</tr>
 							<div class="mt-2 text-warning">${errors.get("1") }</div>
 							<div>
@@ -97,17 +96,24 @@
 					<div class="col-2 text-center">
 						<button class="btn btn-secondary" id="filter-button">登録して終了</button>
 					</div>
-
 				</c:when>
-
-				<c:otherwise>
-					<div>学生情報が存在しませんでした。</div>
-				</c:otherwise>
-
 			</c:choose>
+
+
+
 		</section>
 	</c:param>
 </c:import>
 
+<%--
 
+			<c:choose>
+				<c:when test="${students.size()>0 }">
+				</c:when>
+			</c:choose>
+
+	<c:otherwise>
+		<div>学生情報が存在しませんでした。</div>
+	</c:otherwise>
+				 --%>
 

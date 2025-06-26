@@ -14,7 +14,7 @@ import bean.Test;
 
 public class TestDao extends Dao {
 
-	private String baseSql = "SELECT * FROM test WHERE school_cd = ?";
+	private String baseSql ="select student.no as student_no, student.name, student.ent_year, student.class_num, student.is_attend, student.school_cd, test.no as count, test.point, test.subject_cd from student left join (select * from test where subject_cd = ? and no = ?) as test on student.no = test.student_no";
 
 	// 1件取得
 	public Test get(Student student, Subject subject, School school, int no) throws Exception {
@@ -96,7 +96,7 @@ public class TestDao extends Dao {
 		PreparedStatement statement = null;
 
 		try {
-			String sql = baseSql + " AND class_num = ? AND subject_cd = ? AND no = ?";
+			String sql = baseSql + " where ent_year = ? and student.class_num = ? and student.school_cd = ? and student.is_attend = true;";
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, school.getCd());
 			statement.setString(2, classNum);

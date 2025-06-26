@@ -17,28 +17,34 @@ public class TestDao extends Dao {
 	private String baseSql ="select student.no as student_no, student.name, student.ent_year, student.class_num, student.is_attend, student.school_cd, test.no as count, test.point, test.subject_cd from student left join (select * from test where subject_cd = ? and no = ?) as test on student.no = test.student_no";
 
 	// 1件取得
-	public Test get(Student student, Subject subject, School school, int no) throws Exception {
-		Test test = null;
+	public Test get(Student student, Subject subject, School school, int no) throws Exception
+	{
+		Test test = new Test();
+
 		Connection connection = getConnection();
+
 		PreparedStatement statement = null;
 
 		try {
-			String sql = "SELECT * FROM test WHERE student_no = ? AND subject_cd = ? AND school_cd = ? AND no = ?";
-			statement = connection.prepareStatement(sql);
+
+			statement = connection.prepareStatement("select * from test where student_no = ? and subject_cd = ? and school_cd = ?  and no = ? ;");
+
 			statement.setString(1, student.getNo());
-			statement.setString(2, subject.getCd()); // subject.getName() → getCd() 推奨
+			statement.setString(2, subject.getCd());
 			statement.setString(3, school.getCd());
 			statement.setInt(4, no);
 
 			ResultSet resultSet = statement.executeQuery();
+
+			TestDao testDao = new TestDao();
+
 			if (resultSet.next()) {
-				test = new Test();
-				test.setStudent(student);
-				test.setSubject(subject);
-				test.setSchool(school);
+
+				test.setStudent(testDao.get(resultSet.getString("student")));
+				test.setSubject(testDao.get(resultSet.getString("subject")));
+				test.setSchool(testDao.get(resultSet.getString("school")));
 				test.setNo(resultSet.getInt("no"));
 				test.setPoint(resultSet.getInt("point"));
-				test.setClassNum(resultSet.getString("class_num"));
 			}
 		} finally {
 			if (statement != null) {
@@ -62,23 +68,19 @@ public class TestDao extends Dao {
 
 	// 結果セットをリストに変換
 	private List<Test> postFilter(ResultSet rSet, School school) throws Exception {
+
 		List<Test> list = new ArrayList<>();
 
 		try {
 			while (rSet.next()) {
+
 				Test test = new Test();
-				Student student = new Student();
-				student.setNo(rSet.getString("student_no"));
-				test.setStudent(student);
 
-				Subject subject = new Subject();
-				subject.setCd(rSet.getString("subject_cd")); // setName → setCd 推奨
-				test.setSubject(subject);
-
+				test.setStudent(rSet.getString("student"));
+				test.setSubject(rSet.getString("subject"));
 				test.setSchool(school);
 				test.setNo(rSet.getInt("no"));
 				test.setPoint(rSet.getInt("point"));
-				test.setClassNum(rSet.getString("class_num"));
 
 				list.add(test);
 			}
@@ -89,22 +91,33 @@ public class TestDao extends Dao {
 		return list;
 	}
 
-	// 条件で絞り込み
 	public List<Test> filter(int entYear, String classNum, Subject subject, int num, School school) throws Exception {
+
 		List<Test> list = new ArrayList<>();
+
 		Connection connection = getConnection();
+
 		PreparedStatement statement = null;
 
-		try {
-			String sql = baseSql + " where ent_year = ? and student.class_num = ? and student.school_cd = ? and student.is_attend = true;";
-			statement = connection.prepareStatement(sql);
-			statement.setString(1, school.getCd());
-			statement.setString(2, classNum);
-			statement.setString(3, subject.getCd()); // getName() → getCd() 推奨
-			statement.setInt(4, num);
+		ResultSet resultSet = null;
 
-			ResultSet resultSet = statement.executeQuery();
+		try {
+			statement = connection.prepareStatement(baseSql +" where ent_year = ? and student.class_num = ? and student.school_cd = ? and student.is_attend = true;");
+
+
+			statement.setInt(1, entYear);
+			statement.setString(2, classNum);
+			statement.setString(3, subject.getCd());
+			statement.setInt(4, num);
+			statement.setString(5, school.getCd());
+
+			resultSet = statement.executeQuery();
+
 			list = postFilter(resultSet, school);
+
+		}catch (Exception e) {
+			throw e;
+
 		} finally {
 			if (statement != null) {
 				try {
@@ -125,24 +138,39 @@ public class TestDao extends Dao {
 		return list;
 	}
 
-	// 複数保存
+
 	public boolean save(List<Test> list) throws Exception {
+
 		Connection connection = getConnection();
 
+		PreparedStatement statement = null;
+
+		int count = 0;
+
 		try {
-			connection.setAutoCommit(false);
-			for (Test test : list) {
-				if (!save(test, connection)) {
-					connection.rollback();
-					return false;
-				}
-			}
-			connection.commit();
-			return true;
+			statement = connection.prepareStatement("insert into test(student_no, subject_cd, school_cd, no, point, class_num) values(?, ?, ?, ?, ?, ?)");
+
+			statement.setString(1, list.getStudent());
+			statement.setString(2, list.getSubject());
+			statement.setString(3, list.getSchool().getCd());
+			statement.setString(4, list.getNo());
+			statement.setString(5, list.getPoint());
+			statement.setString(6, list.getClassNum());
+			// プリペアードステートメントを実行
+			count = statement.executeUpdate();
+
 		} catch (Exception e) {
-			connection.rollback();
 			throw e;
 		} finally {
+			// プリペアードステートメントを閉じる
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+			// コネクションを閉じる
 			if (connection != null) {
 				try {
 					connection.close();
@@ -151,25 +179,41 @@ public class TestDao extends Dao {
 				}
 			}
 		}
+
+		if (count > 0) {
+			// 実行件数が1件以上ある場合
+			return true;
+		} else {
+			// 実行件数が0件の場合
+			return false;
+		}
 	}
 
-	// 単一保存
+
 	private boolean save(Test test, Connection connection) throws Exception {
+
+		Connection connection = getConnection();
+
 		PreparedStatement statement = null;
 
-		try {
-			String sql = "INSERT INTO test (student_no, subject_cd, school_cd, no, point, class_num) VALUES (?, ?, ?, ?, ?, ?)";
-			statement = connection.prepareStatement(sql);
-			statement.setString(1, test.getStudent().getNo());
-			statement.setString(2, test.getSubject().getCd()); // getName() → getCd() 推奨
-			statement.setString(3, test.getSchool().getCd());
-			statement.setInt(4, test.getNo());
-			statement.setInt(5, test.getPoint());
-			statement.setString(6, test.getClassNum());
+		int count = 0;
 
-			int rows = statement.executeUpdate();
-			return rows == 1;
+		try {
+			statement = connection.prepareStatement("insert into test(student_no, subject_cd, school_cd, no, point, class_num) values(?, ?, ?, ?, ?, ?)");
+
+			statement.setString(1, list.getStudent());
+			statement.setString(2, list.getSubject());
+			statement.setString(3, list.getSchool().getCd());
+			statement.setString(4, list.getNo());
+			statement.setString(5, list.getPoint());
+			statement.setString(6, list.getClassNum());
+			// プリペアードステートメントを実行
+			count = statement.executeUpdate();
+
+		} catch (Exception e) {
+			throw e;
 		} finally {
+			// プリペアードステートメントを閉じる
 			if (statement != null) {
 				try {
 					statement.close();
@@ -177,7 +221,22 @@ public class TestDao extends Dao {
 					throw sqle;
 				}
 			}
-			// connectionは外で閉じる（呼び出し元で閉じているためここでは閉じない）
+			// コネクションを閉じる
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+		}
+
+		if (count > 0) {
+			// 実行件数が1件以上ある場合
+			return true;
+		} else {
+			// 実行件数が0件の場合
+			return false;
 		}
 	}
 }

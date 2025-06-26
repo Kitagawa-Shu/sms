@@ -3,7 +3,9 @@ package scoremanager.main;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +16,6 @@ import bean.Teacher;
 import bean.Test;
 import dao.ClassNumDao;
 import dao.SubjectDao; // ← 追加
-import dao.TestDao;
 import tool.Action;
 
 public class TestRegistAction extends Action {
@@ -31,13 +32,15 @@ public class TestRegistAction extends Action {
 		String subjectStr = "";
 		String timesNumSer = "";
 		int entYear = 0;
+		String subject = "";
+		int num = 0;
 
 		ClassNumDao classNumDao = new ClassNumDao();
 		SubjectDao subjectDao = new SubjectDao();
-		TestDao testDao = new TestDao();
-		Test test = new Test();
 		LocalDate todaysDate = LocalDate.now();
+		List<Test> tests = null;
 		int year = todaysDate.getYear();
+		Map<String, String> errors = new HashMap<>(); // エラーメッセージ
 
 		// リクエストパラメーターの取得
 		entYearStr = req.getParameter("f1");
@@ -67,6 +70,16 @@ public class TestRegistAction extends Action {
 			entYear = Integer.parseInt(entYearStr);
 		}
 
+		if (entYear !=0 && classNum.equals("0") && subjectList !=null && testNumList !=null ) {
+
+			//tests = TestDao.filter(teacher.getSchool(), entYear, classNum, subject, num);
+
+		} else {
+			errors.put("f5", "0～100の範囲で入力してください");
+			// リクエストにエラーメッセージをセット
+			req.setAttribute("errors", errors);
+
+		}
 
 
 		req.setAttribute("f1", entYearStr);

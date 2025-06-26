@@ -85,11 +85,11 @@
 								<td>${student.classNum }</td>
 								<td>${student.no }</td>
 								<td>${student.name }</td>
+								<td>
+									<input class="form-control" type="text" id="point_${student.no}" name="point_${student.no}" value="${test.point}"/>
+									<div class="text-warning">${errors.get(f5) }</div>
+								</td>
 							</tr>
-							<div class="mt-2 text-warning">${errors.get("1") }</div>
-							<div>
-								<input class="form-control" type="text" id="point" name="point_${test.student.no}" value="${test.point}"/>
-							</div>
 						</c:forEach>
 					</table>
 
@@ -105,15 +105,4 @@
 	</c:param>
 </c:import>
 
-<%--
-
-			<c:choose>
-				<c:when test="${students.size()>0 }">
-				</c:when>
-			</c:choose>
-
-	<c:otherwise>
-		<div>学生情報が存在しませんでした。</div>
-	</c:otherwise>
-				 --%>
 

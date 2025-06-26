@@ -30,6 +30,9 @@ public class SubjectDao extends Dao {
             subject.setCd(rs.getString("cd"));
             subject.setName(rs.getString("name"));
             subject.setSchool(school);
+
+        }else{
+        	subject=null;
         }
 
         st.close();

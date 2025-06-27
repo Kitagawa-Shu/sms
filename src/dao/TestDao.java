@@ -37,14 +37,18 @@ public class TestDao extends Dao {
 			ResultSet resultSet = statement.executeQuery();
 
 			TestDao testDao = new TestDao();
+			StudentDao studentDao = new StudentDao();
+			SubjectDao subjectDao = new SubjectDao();
+			SchoolDao schoolDao = new SchoolDao();
 
 			if (resultSet.next()) {
 
-				test.setStudent(testDao.get(resultSet.getString("student")));
-				test.setSubject(testDao.get(resultSet.getString("subject")));
-				test.setSchool(testDao.get(resultSet.getString("school")));
+				test.setStudent(studentDao.get(resultSet.getString("student_no")));
+				test.setSubject(subjectDao.get(resultSet.getString("subject_cd"),schoolDao.get(resultSet.getString("school_cd"))));
+				test.setSchool(schoolDao.get(resultSet.getString("school_cd")));
 				test.setNo(resultSet.getInt("no"));
 				test.setPoint(resultSet.getInt("point"));
+				test.setClassNum(resultSet.getString("class_num"));
 			}
 		} finally {
 			if (statement != null) {
@@ -75,9 +79,12 @@ public class TestDao extends Dao {
 			while (rSet.next()) {
 
 				Test test = new Test();
+				StudentDao studentDao = new StudentDao();
+				SubjectDao subjectDao = new SubjectDao();
+				SchoolDao schoolDao = new SchoolDao();
 
-				test.setStudent(rSet.getString("student"));
-				test.setSubject(rSet.getString("subject"));
+				test.setStudent(studentDao.get(rSet.getString("student_no")));
+				test.setSubject(subjectDao.get(rSet.getString("subject_cd"),schoolDao.get(rSet.getString("school_cd"))));
 				test.setSchool(school);
 				test.setNo(rSet.getInt("no"));
 				test.setPoint(rSet.getInt("point"));
@@ -147,17 +154,21 @@ public class TestDao extends Dao {
 
 		int count = 0;
 
-		try {
-			statement = connection.prepareStatement("insert into test(student_no, subject_cd, school_cd, no, point, class_num) values(?, ?, ?, ?, ?, ?)");
 
-			statement.setString(1, list.getStudent());
-			statement.setString(2, list.getSubject());
-			statement.setString(3, list.getSchool().getCd());
-			statement.setString(4, list.getNo());
-			statement.setString(5, list.getPoint());
-			statement.setString(6, list.getClassNum());
-			// プリペアードステートメントを実行
-			count = statement.executeUpdate();
+
+		try {
+				statement = connection.prepareStatement("insert into test(student_no, subject_cd, school_cd, no, point, class_num) values(?, ?, ?, ?, ?, ?)");
+
+				for (Test test : list) {
+					statement.setString(1, test.getStudent().getNo());
+					statement.setString(2, test.getSubject().getCd());
+					statement.setString(3, test.getSchool().getCd());
+					statement.setInt(4, test.getNo());
+					statement.setInt(5, test.getPoint());
+					statement.setString(6, test.getStudent().getClassNum());
+
+					count += statement.executeUpdate();
+				}
 
 		} catch (Exception e) {
 			throw e;
@@ -192,21 +203,25 @@ public class TestDao extends Dao {
 
 	private boolean save(Test test, Connection connection) throws Exception {
 
-		Connection connection = getConnection();
-
 		PreparedStatement statement = null;
 
 		int count = 0;
 
 		try {
-			statement = connection.prepareStatement("insert into test(student_no, subject_cd, school_cd, no, point, class_num) values(?, ?, ?, ?, ?, ?)");
+			Test old = get(test.getStudent(), test.getSubject(), test.getSchool(), test.getPoint());
+			if (old == null) {
 
-			statement.setString(1, list.getStudent());
-			statement.setString(2, list.getSubject());
-			statement.setString(3, list.getSchool().getCd());
-			statement.setString(4, list.getNo());
-			statement.setString(5, list.getPoint());
-			statement.setString(6, list.getClassNum());
+				statement = connection.prepareStatement("insert into test(student_no, subject_cd, school_cd, no, point, class_num) values(?, ?, ?, ?, ?, ?)");
+
+				statement.setString(1, test.getStudent().getNo());
+				statement.setString(2, test.getSubject().getCd());
+				statement.setString(3, test.getSchool().getCd());
+				statement.setInt(4, test.getNo());
+				statement.setInt(5, test.getPoint());
+				statement.setString(6, test.getClassNum());
+			}
+
+
 			// プリペアードステートメントを実行
 			count = statement.executeUpdate();
 

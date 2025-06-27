@@ -29,7 +29,7 @@ public class SubjectDeleteExecuteAction extends Action {
         subject = dao.get(cd,teacher.getSchool());
 
         //subject deleteをよびだす
-        boolean Subject = dao.delete(subject);
+        //boolean Subject = dao.delete(subject);
 
 
         //削除

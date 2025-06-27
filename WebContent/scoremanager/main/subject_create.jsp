@@ -19,12 +19,26 @@
 				<div>
 					<label for="no">科目コード</label><br>
 					<input class="form-control" type="text" id="cd" name="cd" value="${cd}" required maxlength="10" placeholder="科目コードを入力してください" />
+
+					<c:if test="${not empty error1}">
+    					<p style="color: orange;">${error1}</p>
+					</c:if>
+
+					<c:if test="${not empty error2}">
+    					<p style="color: orange;">${error2}</p>
+					</c:if>
+
+
 				</div>
 				<div class="mt-2 text-warning">${errors.get("2") }</div>
 				<div>
 					<label for="name">科目名</label><br>
 					<input class="form-control" type="text" id="name" name="name" value="${name }" required maxlength="30" placeholder="科目名を入力してください" />
+
+
+
 				</div>
+
 
 				<div class="mx-auto py-2">
 					<button class="btn btn-secondary" id="create-button" name="end">登録して終了</button>

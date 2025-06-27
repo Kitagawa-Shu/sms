@@ -59,15 +59,7 @@ public class TestListAction extends Action {
 
         } else if (class_num != null && !class_num.isEmpty()
                 && subject_cd != null && !subject_cd.isEmpty()
-                && ent_year != null && !ent_year.isEmpty()) {
-            // 入学年度＋クラス＋科目指定での成績取得
-            // （必要に応じて、TestDaoのfilterなどを使う実装をここに追加）
-
-            req.setAttribute("message", "この条件での成績取得は未実装です。");
-
-        } else {
-            req.setAttribute("message", "検索条件を指定してください。");
-        }
+                && ent_year != null && !ent_year.isEmpty())
 
         // 検索条件保持
         req.setAttribute("f1", ent_year);

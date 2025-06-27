@@ -4,7 +4,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import bean.School;
+import bean.Student;
 import bean.Subject;
 import bean.Test;
 import bean.TestListStudent;
@@ -33,17 +36,25 @@ public class TestListStudentExecuteAction extends Action {
             return;
         }
 
+        //セッションから取得
+        HttpSession session=req.getSession();
+        School school=(School) session.getAttribute("school");
+
+        Student student= (Student) session.getAttribute("student");
+        int testNo = Integer.parseInt(testCd);
+
+
         // 科目情報を取得
         SubjectDao subjectDao = new SubjectDao();
-        Subject subject = subjectDao.get(subjectCd);
+        Subject subject = subjectDao.get(subjectCd, school);
 
         // テスト情報を取得
         TestDao testDao = new TestDao();
-        Test test = testDao.get(testCd);
+        Test test = testDao.get(student, subject, school, testNo );
 
         // 該当の学生成績を取得
         TestListStudentDao testListStudentDao = new TestListStudentDao();
-        List<TestListStudent> testList = testListStudentDao.filterBySubject(subjectCd, classCd, testCd);
+        List<TestListStudent> testList =testListStudentDao.filter(student);
 
         // リクエストにセット
         req.setAttribute("subject", subject);

@@ -47,11 +47,11 @@ public class TestListStudentDao {
         List<TestListStudent> list;
 
         String sql =
-            "SELECT s.name AS subject_name, s.cd AS subject_cd, t.num, t.point"+
-            "FROM test AS t"+
-            "JOIN subject AS s ON t.subject_cd = s.cd"+
-            "WHERE t.student_no = ?"+
-            "ORDER BY s.cd, t.num";
+            "SELECT s.name AS subject_name, s.cd AS subject_cd, t.num, t.point "+
+            "FROM test AS t "+
+            "JOIN subject AS s ON t.subject_cd = s.cd "+
+            "WHERE t.student_no = ? "+
+            "ORDER BY s.cd, t.num ";
 
         try (
             Connection con = DriverManager.getConnection(URL, USER, PASSWORD);

@@ -154,23 +154,13 @@ public class TestDao extends Dao {
 
 		int count = 0;
 
-
-
 		try {
-				statement = connection.prepareStatement("insert into test(student_no, subject_cd, school_cd, no, point, class_num) values(?, ?, ?, ?, ?, ?)");
-
-				for (Test test : list) {
-					statement.setString(1, test.getStudent().getNo());
-					statement.setString(2, test.getSubject().getCd());
-					statement.setString(3, test.getSchool().getCd());
-					statement.setInt(4, test.getNo());
-					statement.setInt(5, test.getPoint());
-					statement.setString(6, test.getStudent().getClassNum());
-
-					count += statement.executeUpdate();
-				}
-
-		} catch (Exception e) {
+			for (Test test : list) {
+	            if (save(test, connection)) {
+	                count++;
+	            }
+	           }
+	         } catch (Exception e) {
 			throw e;
 		} finally {
 			// プリペアードステートメントを閉じる
@@ -190,68 +180,56 @@ public class TestDao extends Dao {
 				}
 			}
 		}
+		return count > 0;
 
-		if (count > 0) {
-			// 実行件数が1件以上ある場合
-			return true;
-		} else {
-			// 実行件数が0件の場合
-			return false;
-		}
 	}
 
 
 	private boolean save(Test test, Connection connection) throws Exception {
 
 		PreparedStatement statement = null;
+	    int count = 0;
 
-		int count = 0;
+	    try {
+	        // 既存データの取得（主キー情報で取得）
+	        Test old = get(test.getStudent(), test.getSubject(), test.getSchool(), test.getNo());
 
-		try {
-			Test old = get(test.getStudent(), test.getSubject(), test.getSchool(), test.getPoint());
-			if (old == null) {
+	        if (old == null) {
+	            // 存在しなければINSERT
+	            statement = connection.prepareStatement(
+	                "INSERT INTO test(student_no, subject_cd, school_cd, no, point, class_num) VALUES(?, ?, ?, ?, ?, ?)"
+	            );
+	        } else {
+	            // 存在すればUPDATE
+	            statement = connection.prepareStatement(
+	                "UPDATE test SET point = ?, class_num = ? WHERE student_no = ? AND subject_cd = ? AND school_cd = ? AND no = ?"
+	            );
+	        }
 
-				statement = connection.prepareStatement("insert into test(student_no, subject_cd, school_cd, no, point, class_num) values(?, ?, ?, ?, ?, ?)");
+	        if (old == null) {
+	            statement.setString(1, test.getStudent().getNo());
+	            statement.setString(2, test.getSubject().getCd());
+	            statement.setString(3, test.getSchool().getCd());
+	            statement.setInt(4, test.getNo());
+	            statement.setInt(5, test.getPoint());
+	            statement.setString(6, test.getClassNum());
+	        } else {
+	            statement.setInt(1, test.getPoint());
+	            statement.setString(2, test.getClassNum());
+	            statement.setString(3, test.getStudent().getNo());
+	            statement.setString(4, test.getSubject().getCd());
+	            statement.setString(5, test.getSchool().getCd());
+	            statement.setInt(6, test.getNo());
+	        }
 
-				statement.setString(1, test.getStudent().getNo());
-				statement.setString(2, test.getSubject().getCd());
-				statement.setString(3, test.getSchool().getCd());
-				statement.setInt(4, test.getNo());
-				statement.setInt(5, test.getPoint());
-				statement.setString(6, test.getClassNum());
-			}
+	        count = statement.executeUpdate();
 
+	    } finally {
+	        if (statement != null) {
+	            statement.close();
+	        }
+	    }
 
-			// プリペアードステートメントを実行
-			count = statement.executeUpdate();
-
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			// プリペアードステートメントを閉じる
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException sqle) {
-					throw sqle;
-				}
-			}
-			// コネクションを閉じる
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException sqle) {
-					throw sqle;
-				}
-			}
-		}
-
-		if (count > 0) {
-			// 実行件数が1件以上ある場合
-			return true;
-		} else {
-			// 実行件数が0件の場合
-			return false;
-		}
+	    return count > 0;
 	}
 }

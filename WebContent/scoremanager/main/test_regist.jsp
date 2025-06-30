@@ -87,7 +87,7 @@
 								<td>${student.name }</td>
 								<td>
 									<input class="form-control" type="text" id="point_${student.no}" name="point_${student.no}" value="${test.point}"/>
-									<div class="text-warning">${errors.get(f5) }</div>
+									<div class="text-warning">${errors.get(1) }</div>
 								</td>
 							</tr>
 						</c:forEach>

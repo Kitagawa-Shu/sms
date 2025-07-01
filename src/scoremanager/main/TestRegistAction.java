@@ -16,6 +16,7 @@ import bean.Teacher;
 import bean.Test;
 import dao.ClassNumDao;
 import dao.SubjectDao; // ← 追加
+import dao.TestDao;
 import tool.Action;
 
 public class TestRegistAction extends Action {
@@ -32,12 +33,13 @@ public class TestRegistAction extends Action {
 		String subjectStr = "";
 		String timesNumSer = "";
 		int entYear = 0;
-		String subject = "";
 		int num = 0;
+		Subject subject = null;
 
 		ClassNumDao classNumDao = new ClassNumDao();
 		SubjectDao subjectDao = new SubjectDao();
 		LocalDate todaysDate = LocalDate.now();
+		TestDao testDao =new TestDao();
 		List<Test> tests = null;
 		int year = todaysDate.getYear();
 		Map<String, String> errors = new HashMap<>(); // エラーメッセージ
@@ -47,6 +49,7 @@ public class TestRegistAction extends Action {
 		classNum = req.getParameter("f2");
 		subjectStr = req.getParameter("f3");
 		timesNumSer = req.getParameter("f4");
+
 
 
 		// 学校コードからクラス番号の一覧を取得
@@ -72,7 +75,8 @@ public class TestRegistAction extends Action {
 
 		if (entYear !=0 && classNum.equals("0") && subjectList !=null && testNumList !=null ) {
 
-			//tests = TestDao.filter(teacher.getSchool(), entYear, classNum, subject, num);
+
+			tests = testDao.filter( entYear, classNum, subject, num,teacher.getSchool());
 
 		} else {
 			errors.put("f5", "0～100の範囲で入力してください");

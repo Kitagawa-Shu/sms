@@ -44,7 +44,7 @@
 					<button class="btn btn-secondary" id="create-button" name="end">登録して終了</button>
 				</div>
 			</form>
-			<a href="SubjectCreate.action">戻る</a>
+			<a href="SubjectList.action">戻る</a>
 		</section>
 	</c:param>
 </c:import>

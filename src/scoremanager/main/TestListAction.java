@@ -1,5 +1,6 @@
 package scoremanager.main;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import javax.servlet.http.HttpSession;
 import bean.School;
 import bean.Student;
 import bean.Subject;
+import bean.Teacher;
 import bean.TestListStudent;
+import dao.ClassNumDao;
 import dao.StudentDao;
 import dao.SubjectDao;
 import dao.TestListStudentDao;
@@ -23,7 +26,7 @@ public class TestListAction extends Action {
 
         // セッション情報から学校コード取得
         HttpSession session = req.getSession();
-        String school_cd = (String) session.getAttribute("school_cd");
+        Teacher teacher = (Teacher)session.getAttribute("user");
 
         // 入力パラメータ取得
         String ent_year = req.getParameter("f1");
@@ -32,13 +35,27 @@ public class TestListAction extends Action {
         String student_no = req.getParameter("f4");
 
         // Schoolオブジェクト生成
-        School school = new School();
-        school.setCd(school_cd);
+        School school = teacher.getSchool();
+        //school.setCd(school_cd);
 
         // 科目一覧取得（セレクトボックス表示用）
         SubjectDao subjectDao = new SubjectDao();
         List<Subject> subject_list = subjectDao.filter(school);
-        req.setAttribute("subject_list", subject_list);
+
+        // 年度一覧取得
+        List<Integer> entYearSet = new ArrayList<>();
+		// 10年前から1年後まで年をリストに追加
+        LocalDate todaysDate = LocalDate.now(); // LocalDateインスタンスを取得
+		int year = todaysDate.getYear(); // 現在の年を取得
+
+		for (int i = year - 10; i < year + 1; i++) {
+			entYearSet.add(i);
+		}
+
+
+        // クラスの一覧取得
+		ClassNumDao classNumDao = new ClassNumDao();
+		List<String> list = classNumDao.filter(teacher.getSchool());
 
         // 成績リスト用リスト
         List<TestListStudent> test_list = new ArrayList<>();
@@ -51,14 +68,10 @@ public class TestListAction extends Action {
             List<TestListStudent> result = testListStudentDao.filter(student);
             if (result != null) test_list.addAll(result);
 
-            if (test_list.isEmpty()) {
-                req.setAttribute("message", "該当する成績がありません。");
-            }
-
             // 他の検索条件はクリア
-            req.setAttribute("f1", null);
-            req.setAttribute("f2", null);
-            req.setAttribute("f3", null);
+//            req.setAttribute("f1", null);
+//            req.setAttribute("f2", null);
+//            req.setAttribute("f3", null);
             req.setAttribute("f4", student_no);
 
         } else if (ent_year != null && !ent_year.isEmpty()
@@ -79,21 +92,27 @@ public class TestListAction extends Action {
                 }
             }
 
-            if (test_list.isEmpty()) {
-                req.setAttribute("message", "該当する成績がありません。");
-            }
-
             // 検索条件保持
-            req.setAttribute("f1", ent_year);
-            req.setAttribute("f2", class_num);
-            req.setAttribute("f3", subject_cd);
+//            req.setAttribute("f1", ent_year);
+//            req.setAttribute("f2", class_num);
+//            req.setAttribute("f3", subject_cd);
             req.setAttribute("f4", null);
         }
+
+        System.out.println("-----------------------");
+        for (Subject s : subject_list) {
+        	System.out.println(s.getCd() + ":" + s.getName() + ":" + s.getSchool().getCd());
+        }
+
+
+        req.setAttribute("ent_year_set", entYearSet);
+        req.setAttribute("class_num_set", list);
+        req.setAttribute("subject_list", subject_list);
 
         // 成績リストをセット
         req.setAttribute("test_list_student", test_list);
 
         // JSP へフォワード
-        req.getRequestDispatcher("test_list_student.jsp").forward(req, res);
+        req.getRequestDispatcher("test_list.jsp").forward(req, res);
     }
 }

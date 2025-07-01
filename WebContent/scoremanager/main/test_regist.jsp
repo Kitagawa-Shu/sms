@@ -44,7 +44,7 @@
 							<option value="0">--------</option>
 							<c:forEach var="subject" items="${subject_set }">
 								<%-- 現在のnumと選択されていたf2が一致していた場合selectedを追記 --%>
-								<option value="${subject.name }" <c:if test="${subject.name==f3 }">selected</c:if>>${subject.name }</option>
+								<option value="${subject.cd }" <c:if test="${subject.cd==f3 }">selected</c:if>>${subject.name }</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -79,16 +79,16 @@
 							<th></th>
 							<th></th>
 						</tr>
-						<c:forEach var="student" items="${students }">
+						<c:forEach var="test" items="${tests }">
 							<tr>
-								<td>${student.entYear }</td>
-								<td>${student.classNum }</td>
-								<td>${student.no }</td>
-								<td>${student.name }</td>
-								<td>
-									<input class="form-control" type="text" id="point_${student.no}" name="point_${student.no}" value="${test.point}"/>
+								<td>${test.student.entYear }</td>
+								<td>${test.student.classNum }</td>
+								<td>${test.student.no }</td>
+								<td>${test.student.name }</td>
+								<%-- <td>
+									<input class="form-control" type="text"  name="point_${test.student.no}" value="${test.point}"/>
 									<div class="text-warning">${errors.get(1) }</div>
-								</td>
+								</td>--%>
 							</tr>
 						</c:forEach>
 					</table>
@@ -98,8 +98,6 @@
 					</div>
 				</c:when>
 			</c:choose>
-
-
 
 		</section>
 	</c:param>

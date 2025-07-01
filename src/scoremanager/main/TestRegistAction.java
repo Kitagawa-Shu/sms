@@ -73,16 +73,13 @@ public class TestRegistAction extends Action {
 			entYear = Integer.parseInt(entYearStr);
 		}
 
-		if (entYear !=0 && classNum.equals("0") && subjectList !=null && testNumList !=null ) {
 
+
+		if (entYear !=0 && !classNum.equals("0") && subjectList !=null && testNumList !=null ) {
+			/* subjectを1件取得する */
+			subject = subjectDao.get(subjectStr, teacher.getSchool());
 
 			tests = testDao.filter( entYear, classNum, subject, num,teacher.getSchool());
-
-		} else {
-			errors.put("f5", "0～100の範囲で入力してください");
-			// リクエストにエラーメッセージをセット
-			req.setAttribute("errors", errors);
-
 		}
 
 
@@ -91,11 +88,13 @@ public class TestRegistAction extends Action {
 		req.setAttribute("f3", subjectStr);
 		req.setAttribute("f4", timesNumSer);
 
+
 		// JSPに渡すデータをセット
 		req.setAttribute("class_num_set", list);
 		req.setAttribute("ent_year_set", entYearSet);
 		req.setAttribute("subject_set", subjectList); // ★ 科目一覧
 		req.setAttribute("times_num_set", testNumList);     // ★ テスト回数
+		req.setAttribute("tests", tests);
 
 		req.getRequestDispatcher("test_regist.jsp").forward(req, res);
 	}

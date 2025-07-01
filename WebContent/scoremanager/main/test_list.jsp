@@ -9,7 +9,7 @@
         <section class="me-4">
             <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">成績参照</h2>
 
-            <form method="get" action="TestListAction">
+            <form method="get" action="TestListSubjectExecuteAction">
                 <div class="row border mx-1 mb-1 py-2 align-items-center rounded" id="filter">
 
                     <div class="col">
@@ -41,8 +41,8 @@
                         <select class="form-select" id="student-f3-select" name="f3">
                             <option value="">--------</option>
                             <c:forEach var="subject" items="${subject_list}">
-                                <option value="${subject.subjectCd}" <c:if test="${subject.subjectCd == f3}">selected</c:if>>
-                                    ${subject.subjectName}
+                                <option value="${subject.cd}" <c:if test="${subject.cd == f3}">selected</c:if>>
+                                    ${subject.name}
                                 </option>
                             </c:forEach>
                         </select>
@@ -69,6 +69,8 @@
                     </div>
 
                 </div>
+
+
 
 
 

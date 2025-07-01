@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -10,21 +9,21 @@ import java.util.List;
 import bean.Student;
 import bean.TestListStudent;
 
-public class TestListStudentDao {
-
-    // データベース接続情報（自分の環境にあわせて書き換えてください）
-    private static final String URL = "jdbc:h2:tcp://localhost/~/exam";
-    private static final String USER = "sa";
-    private static final String PASSWORD = "";
-
-    // JDBCドライバの読み込み（初回実行時に一度だけ）
-    static {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // MySQLドライバ
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+public class TestListStudentDao extends Dao {
+//
+//    // データベース接続情報（自分の環境にあわせて書き換えてください）
+//    private static final String URL = "jdbc:h2:tcp://localhost/~/exam";
+//    private static final String USER = "sa";
+//    private static final String PASSWORD = "";
+//
+//    // JDBCドライバの読み込み（初回実行時に一度だけ）
+//    static {
+//        try {
+//            Class.forName("com.mysql.cj.jdbc.Driver"); // MySQLドライバ
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     // ResultSet を List<TestListStudent> に変換する
     public List<TestListStudent> postFilter(ResultSet rSet) throws Exception {
@@ -54,7 +53,7 @@ public class TestListStudentDao {
             "ORDER BY s.cd, t.num ";
 
         try (
-            Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
+            Connection con = getConnection();
             PreparedStatement stmt = con.prepareStatement(sql)
         ) {
             stmt.setString(1, student.getNo());

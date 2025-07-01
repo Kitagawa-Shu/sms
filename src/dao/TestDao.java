@@ -111,11 +111,10 @@ public class TestDao extends Dao {
 		try {
 			statement = connection.prepareStatement(baseSql +" where ent_year = ? and student.class_num = ? and student.school_cd = ? and student.is_attend = true;");
 
-
-			statement.setInt(1, entYear);
-			statement.setString(2, classNum);
-			statement.setString(3, subject.getCd());
-			statement.setInt(4, num);
+			statement.setString(1, subject.getCd());
+			statement.setInt(2, num);
+			statement.setInt(3, entYear);
+			statement.setString(4, classNum);
 			statement.setString(5, school.getCd());
 
 			resultSet = statement.executeQuery();

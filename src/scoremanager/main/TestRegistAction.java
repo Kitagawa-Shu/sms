@@ -31,7 +31,7 @@ public class TestRegistAction extends Action {
 		String entYearStr = "";
 		String classNum = "";
 		String subjectStr = "";
-		String timesNumSer = "";
+		String timesNumStr = "";
 		int entYear = 0;
 		int num = 0;
 		Subject subject = null;
@@ -48,7 +48,7 @@ public class TestRegistAction extends Action {
 		entYearStr = req.getParameter("f1");
 		classNum = req.getParameter("f2");
 		subjectStr = req.getParameter("f3");
-		timesNumSer = req.getParameter("f4");
+		timesNumStr = req.getParameter("f4");
 
 
 
@@ -73,6 +73,10 @@ public class TestRegistAction extends Action {
 			entYear = Integer.parseInt(entYearStr);
 		}
 
+		/* timesNumStrをnumに数値変換して代入 */
+		if (timesNumStr != null) {
+			num = Integer.parseInt(timesNumStr);
+		}
 
 
 		if (entYear !=0 && !classNum.equals("0") && subjectList !=null && testNumList !=null ) {
@@ -80,13 +84,28 @@ public class TestRegistAction extends Action {
 			subject = subjectDao.get(subjectStr, teacher.getSchool());
 
 			tests = testDao.filter( entYear, classNum, subject, num,teacher.getSchool());
+			// debug
+			System.out.println("-----------------------------------");
+			for(Test t: tests) {
+				System.out.println(t.getNo() + ":" + t.getClassNum() + ":" + t.getPoint());
+			}
+
+			System.out.println("-----------------------------------");
+			System.out.println("entYear:" + entYear);
+			System.out.println("classNum:" + classNum);
+			System.out.println("subect:" + subject.getCd());
+			System.out.println("num:" + num);
+			System.out.println("school:" + teacher.getSchool().getCd());
+
+
+
 		}
 
 
 		req.setAttribute("f1", entYearStr);
 		req.setAttribute("f2", classNum);
 		req.setAttribute("f3", subjectStr);
-		req.setAttribute("f4", timesNumSer);
+		req.setAttribute("f4", timesNumStr);
 
 
 		// JSPに渡すデータをセット
@@ -95,6 +114,9 @@ public class TestRegistAction extends Action {
 		req.setAttribute("subject_set", subjectList); // ★ 科目一覧
 		req.setAttribute("times_num_set", testNumList);     // ★ テスト回数
 		req.setAttribute("tests", tests);
+
+
+
 
 		req.getRequestDispatcher("test_regist.jsp").forward(req, res);
 	}

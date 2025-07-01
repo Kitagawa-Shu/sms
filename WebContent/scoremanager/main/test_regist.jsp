@@ -67,7 +67,7 @@
 				</div>
 			</form>
 			<c:choose>
-				<c:when test="${students.size()>0 }">
+				<c:when test="${not empty tests }">
 					<div>科目：${subject.name } (${timesnum })</div>
 					<table class="table table-hover">
 						<tr>
@@ -85,10 +85,10 @@
 								<td>${test.student.classNum }</td>
 								<td>${test.student.no }</td>
 								<td>${test.student.name }</td>
-								<%-- <td>
-									<input class="form-control" type="text"  name="point_${test.student.no}" value="${test.point}"/>
+								<td>
+									<input class="form-control" type="text"  name="${test.student.no}" value="${test.point}"/>
 									<div class="text-warning">${errors.get(1) }</div>
-								</td>--%>
+								</td>
 							</tr>
 						</c:forEach>
 					</table>

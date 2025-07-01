@@ -11,7 +11,7 @@
 
 	<c:param name="content">
 		<section class="me=4">
-			<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">学生管理</h2>
+			<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">成績管理</h2>
 
 			<form method="get">
 				<div class="row border mx-1 mb-1 py-2 align-items-center rounded" id="filter">

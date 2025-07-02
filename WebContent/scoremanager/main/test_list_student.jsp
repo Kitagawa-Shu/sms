@@ -9,7 +9,7 @@
     <section class="me-4">
       <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">成績参照</h2>
 
-      <form method="get">
+      <form action="TestListSubjectExecute.action" method="get">
         <div class="row border mx-1 mb-1 py-2 align-items-center rounded" id="filter">
 
           <!-- 科目情報 -->

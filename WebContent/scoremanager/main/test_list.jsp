@@ -11,7 +11,7 @@
 
 
 		<div class="row border mx-1 mb-1 py-2 align-items-center rounded" id="filter">
-            <form method="get" action="TestListSubjectExecuteAction">
+            <form method="get" action="TestListSubjectExecute.action">
             	<div class="row border mx-1 mb-1 py-2 align-items-center rounded">
 
                     <div class="col">
@@ -61,7 +61,7 @@
 
                 <hr style="margin-top: 20px; width: 100%;">
 
-			<form method="get" action="TestListStudentExecuteAction">
+			<form method="get" action="TestListStudentExecute.action">
                 <div class="row border mx-1 mb-1 py-2 align-items-center rounded">
 
 

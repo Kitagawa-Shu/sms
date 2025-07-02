@@ -99,10 +99,10 @@ public class TestListAction extends Action {
             req.setAttribute("f4", null);
         }
 
-        System.out.println("-----------------------");
-        for (Subject s : subject_list) {
-        	System.out.println(s.getCd() + ":" + s.getName() + ":" + s.getSchool().getCd());
-        }
+        //System.out.println("-----------------------");
+        //for (Subject s : subject_list) {
+        	//System.out.println(s.getCd() + ":" + s.getName() + ":" + s.getSchool().getCd());
+        //}
 
 
         req.setAttribute("ent_year_set", entYearSet);

@@ -92,18 +92,13 @@
 								<td>
 									<input class="form-control" type="text"  name="point_${test.student.no}" value="${test.point}"/>
 									<input type="hidden" name="regist" value="${test.student.no }">
-									<div class="text-warning">${errors.get(1) }</div>
+									<div class="text-warning">${errors[test.student.no]}</div>
 								</td>
 							</tr>
 						</c:forEach>
 					</table>
-					
-					
-					
-					
-					
-					
-										
+
+
 					<div class="col-2 text-center">
 						<button class="btn btn-secondary" id="filter-button">登録して終了</button>
 					</div>

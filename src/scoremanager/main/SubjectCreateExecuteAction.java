@@ -38,20 +38,6 @@ import tool.Action;
 
 	        System.out.println(subject);
 
-	        if (subject != null) {
-	            req.setAttribute("error1", "科目コードが重複しています。");
-	            req.setAttribute("cd", cd);
-	            req.setAttribute("name", name);
-
-	            req.getRequestDispatcher("subject_create.jsp").forward(req, res);
-	            return;
-
-	        }
-
-
-
-
-
 	        if (name.length() != 3) {
 	            req.setAttribute("error2", "科目コードは3文字以内で入力してください。");
 	            req.setAttribute("cd", cd);
@@ -60,22 +46,36 @@ import tool.Action;
 	            return;
 	        }
 
+	        if (subject != null) {
+	            req.setAttribute("error1", "科目コードが重複しています。");
+	            req.setAttribute("cd", cd);
+	            req.setAttribute("name", name);
 
-	        School school = new School();
-	        school.setCd(schoolCd);
+	            req.getRequestDispatcher("subject_create.jsp").forward(req, res);
+	            return;
+
+	        } else {
+
+		        School school = new School();
+		        school.setCd(schoolCd);
+
+		        subject = new Subject();
+
+		        System.out.println(teacher.getSchool());
+
+		        subject.setSchool(teacher.getSchool());
+		        subject.setCd(cd);
+		        subject.setName(name);
 
 
-	        System.out.println(teacher.getSchool());
-
-	        subject.setSchool(teacher.getSchool());
-	        subject.setCd(cd);
-	        subject.setName(name);
+		        SubjectDao dao = new SubjectDao();
+		        dao.save(subject);
 
 
-	        SubjectDao dao = new SubjectDao();
-	        dao.save(subject);
+		        req.getRequestDispatcher("subject_create_done.jsp").forward(req, res);
+
+	        }
 
 
-	        req.getRequestDispatcher("subject_update_done.jsp").forward(req, res);
 	    }
 	}

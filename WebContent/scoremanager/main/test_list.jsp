@@ -9,8 +9,10 @@
         <section class="me-4">
             <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">成績参照</h2>
 
+
+		<div class="row border mx-1 mb-1 py-2 align-items-center rounded" id="filter">
             <form method="get" action="TestListSubjectExecuteAction">
-                <div class="row border mx-1 mb-1 py-2 align-items-center rounded" id="filter">
+            	<div class="row border mx-1 mb-1 py-2 align-items-center rounded">
 
                     <div class="col">
                         <p>科目情報</p>
@@ -52,7 +54,17 @@
                         <button class="btn btn-secondary" type="submit">検索</button>
                     </div>
 
-                    <hr style="margin-top: 20px; width: 100%;">
+
+
+					</div>
+                </form>
+
+                <hr style="margin-top: 20px; width: 100%;">
+
+			<form method="get" action="TestListStudentExecuteAction">
+                <div class="row border mx-1 mb-1 py-2 align-items-center rounded">
+
+
 
                     <div class="col-2">
                         <p>学生情報</p>
@@ -68,14 +80,17 @@
                         <button class="btn btn-secondary" type="submit">検索</button>
                     </div>
 
+
+
                 </div>
-
-
-
-
-
-                <p style="color: aqua">科目情報を選択または学生情報を入力して検索ボタンをクリックしてください</p>
             </form>
+
+
+
+        </div>
+	<p style="color: aqua">科目情報を選択または学生情報を入力して検索ボタンをクリックしてください</p>
+
+
 
         </section>
     </c:param>

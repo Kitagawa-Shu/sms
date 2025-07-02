@@ -72,7 +72,7 @@ import tool.Action;
 		        dao.save(subject);
 
 
-		        req.getRequestDispatcher("subject_update_done.jsp").forward(req, res);
+		        req.getRequestDispatcher("subject_create_done.jsp").forward(req, res);
 
 	        }
 

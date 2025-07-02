@@ -125,7 +125,7 @@ public class TestRegistExecuteAction extends Action {
 
 			if (entYear !=0 && !classNum.equals("0") && subjectList !=null && testNumList !=null ) {
 				/* subjectを1件取得する */
-				subject = subjectDao.get(student_no, teacher.getSchool());
+				subject = subjectDao.get(subjectStr, teacher.getSchool());
 
 				tests = testDao.filter( entYear, classNum, subject, num,teacher.getSchool());
 			}

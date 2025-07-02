@@ -38,7 +38,6 @@ public class SubjectDeleteExecuteAction extends Action {
 
 
         } else {
-        	req.setAttribute("error", "指定された科目が存在しません");
             req.getRequestDispatcher("subject_delete.jsp").forward(req,res);
         }
 

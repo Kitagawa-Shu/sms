@@ -25,18 +25,22 @@ public class SubjectDeleteAction extends Action {
 
     	// リクエストパラメーターの取得
         subject_cd = req.getParameter("cd");
+        subject_name = req.getParameter("name");
 
      // オブジェクトを生成
         SubjectDao dao = new SubjectDao();
         Subject subject = new Subject();
 
         //subjectDaoに検索
-        subject = dao.get(subject_cd,teacher.getSchool());
+        subject = dao.get(subject_cd, teacher.getSchool());
+        
 
         //セットリクエストパラメータ
         subject.setCd(subject_cd);
+        subject.setName(subject_name);
 
         req.setAttribute("subject_cd",subject_cd );
+        req.setAttribute("subject_name",subject_name );
 
 
         //科目管理一覧に遷移

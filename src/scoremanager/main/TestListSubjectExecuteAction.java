@@ -12,6 +12,7 @@ import bean.School;
 import bean.Subject;
 import bean.Teacher;
 import bean.TestListSubject;
+import dao.SubjectDao;
 import dao.TestListSubjectDao;
 import tool.Action;
 
@@ -61,7 +62,9 @@ public class TestListSubjectExecuteAction extends Action {
 		/*
 		 * 入力された入学年度、クラス、科目の成績データを取得する(DAOを使用する)
 		 */
-		Subject subject = new Subject();
+
+		SubjectDao subjectDao = new SubjectDao();
+		Subject subject = subjectDao.get(subject_cd,teacher.getSchool());
 
 		School school = teacher.getSchool();
 

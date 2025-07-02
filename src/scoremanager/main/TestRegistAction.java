@@ -84,21 +84,6 @@ public class TestRegistAction extends Action {
 			subject = subjectDao.get(subjectStr, teacher.getSchool());
 
 			tests = testDao.filter( entYear, classNum, subject, num,teacher.getSchool());
-			// debug
-			System.out.println("-----------------------------------");
-			for(Test t: tests) {
-				System.out.println(t.getNo() + ":" + t.getClassNum() + ":" + t.getPoint());
-			}
-
-			System.out.println("-----------------------------------");
-			System.out.println("entYear:" + entYear);
-			System.out.println("classNum:" + classNum);
-			System.out.println("subect:" + subject.getCd());
-			System.out.println("num:" + num);
-			System.out.println("school:" + teacher.getSchool().getCd());
-
-
-
 		}
 
 

@@ -66,9 +66,13 @@
 
 				</div>
 			</form>
+
+			<form action="TestRegistExecute.action" method="get">
 			<c:choose>
-				<c:when test="${students.size()>0 }">
-					<div>科目：${subject.name } (${timesnum })</div>
+				<c:when test="${not empty tests }">
+					<div>科目：${subject.name} (${f4})</div>
+					<input type="hidden" name="count" value="${f4}">
+					<input type="hidden" name="subject" value="${f3}">
 					<table class="table table-hover">
 						<tr>
 							<th>入学年度</th>
@@ -85,20 +89,28 @@
 								<td>${test.student.classNum }</td>
 								<td>${test.student.no }</td>
 								<td>${test.student.name }</td>
-								<%-- <td>
+								<td>
 									<input class="form-control" type="text"  name="point_${test.student.no}" value="${test.point}"/>
+									<input type="hidden" name="regist" value="${test.student.no }">
 									<div class="text-warning">${errors.get(1) }</div>
-								</td>--%>
+								</td>
 							</tr>
 						</c:forEach>
 					</table>
-
+					
+					
+					
+					
+					
+					
+										
 					<div class="col-2 text-center">
 						<button class="btn btn-secondary" id="filter-button">登録して終了</button>
 					</div>
+
 				</c:when>
 			</c:choose>
-
+			</form>
 		</section>
 	</c:param>
 </c:import>

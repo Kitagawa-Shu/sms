@@ -26,14 +26,14 @@ public class TestListStudentDao extends Dao {
 //    }
 
     // ResultSet を List<TestListStudent> に変換する
-    public List<TestListStudent> postFilter(ResultSet rSet) throws Exception {
+    private List<TestListStudent> postFilter(ResultSet rSet) throws Exception {
         List<TestListStudent> list = new ArrayList<>();
 
         while (rSet.next()) {
             TestListStudent test = new TestListStudent();
             test.setSubjectName(rSet.getString("subject_name"));
             test.setSubjectCd(rSet.getString("subject_cd"));
-            test.setNum(rSet.getInt("num"));
+            test.setNum(rSet.getInt("no"));
             test.setPoint(rSet.getInt("point"));
             list.add(test);
         }
@@ -46,11 +46,11 @@ public class TestListStudentDao extends Dao {
         List<TestListStudent> list;
 
         String sql =
-            "SELECT s.name AS subject_name, s.cd AS subject_cd, t.num, t.point "+
+            "SELECT s.name AS subject_name, s.cd AS subject_cd, t.no, t.point "+
             "FROM test AS t "+
             "JOIN subject AS s ON t.subject_cd = s.cd "+
             "WHERE t.student_no = ? "+
-            "ORDER BY s.cd, t.num ";
+            "ORDER BY t.no ";
 
         try (
             Connection con = getConnection();

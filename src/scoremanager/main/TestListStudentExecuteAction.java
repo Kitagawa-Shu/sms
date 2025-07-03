@@ -8,12 +8,8 @@ import javax.servlet.http.HttpSession;
 
 import bean.School;
 import bean.Student;
-import bean.Subject;
 import bean.Teacher;
-import bean.Test;
 import bean.TestListStudent;
-import dao.SubjectDao;
-import dao.TestDao;
 import dao.TestListStudentDao;
 import tool.Action;
 
@@ -22,48 +18,48 @@ public class TestListStudentExecuteAction extends Action {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-        // セッションから学校・教師・学生情報を取得
+        // セッションから教師を取得し、学校を取得
         HttpSession session = req.getSession();
-        School school = (School) session.getAttribute("school");
         Teacher teacher = (Teacher) session.getAttribute("user");
-        Student student = (Student) session.getAttribute("student");
+        School school = teacher.getSchool();
 
         // パラメータ取得
-        String subjectCd = req.getParameter("subject_cd");
-        String classCd = req.getParameter("class_cd");
-        String testCd = req.getParameter("test_cd");
+        //String subjectCd = req.getParameter("f3");
+        String studentNo = req.getParameter("f4");
 
-        // 入力チェック（subject_cd / class_cd / test_cd）
-        if (subjectCd == null || subjectCd.isEmpty() ||
-            classCd == null || classCd.isEmpty() ||
-            testCd == null || testCd.isEmpty()) {
+//        System.out.println("debug-科目コード:学生番号=" + subjectCd + ":" + studentNo);
 
-            req.setAttribute("message", "すべてのフィールドを入力してください。");
-            req.getRequestDispatcher("test_list_subject.jsp").forward(req, res);
+        // チェック
+        if (studentNo == null || studentNo.isEmpty()) {
+
+            //req.setAttribute("message", "科目コードと学生番号は必須です。");
+            req.getRequestDispatcher("test_list.jsp").forward(req, res);
             return;
         }
 
-        // 変換
-        int testNo = Integer.parseInt(testCd);
+        // 学生情報
+        Student student = new Student();
+        student.setNo(studentNo);
 
-        // 科目情報の取得
-        SubjectDao subjectDao = new SubjectDao();
-        Subject subject = subjectDao.get(subjectCd, school);
+        // 科目
+        //SubjectDao subjectDao = new SubjectDao();
+//        Subject subject = subjectDao.get(subjectCd, school);
 
-        // テスト情報の取得
-        TestDao testDao = new TestDao();
-        Test test = testDao.get(student, subject, school, testNo);
+        // テスト情報（1回目固定）
+        //TestDao testDao = new TestDao();
+//        Test test = testDao.get(student, subject, school, 1);
 
-        // 学生の成績一覧取得
+        // 成績一覧
         TestListStudentDao testListStudentDao = new TestListStudentDao();
         List<TestListStudent> testList = testListStudentDao.filter(student);
 
-        // リクエスト属性へセット
-        req.setAttribute("subject", subject);
-        req.setAttribute("test", test);
-        req.setAttribute("test_list", testList);
+        // 属性をセット（JSPに合わせる）
+        req.setAttribute("f4", studentNo);              // 入力値再表示用
+        req.setAttribute("student", student);           // 氏名など表示用
+//        req.setAttribute("test", test);                 // テスト情報（未使用でもOK）
+        req.setAttribute("test_list", testList);        // 成績一覧表示用
 
-        // JSP へフォワード
+        // 遷移先
         req.getRequestDispatcher("test_list_student.jsp").forward(req, res);
     }
 }

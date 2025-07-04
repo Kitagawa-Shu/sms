@@ -45,7 +45,7 @@ public class SubjectDeleteAction extends Action {
 
 
         //科目管理一覧に遷移
-        req.getRequestDispatcher("subject_deletea.jsp").forward(req, res);
+        req.getRequestDispatcher("subject_delete.jsp").forward(req, res);
 
 
 

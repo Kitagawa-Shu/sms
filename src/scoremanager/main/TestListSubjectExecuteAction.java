@@ -80,23 +80,16 @@ public class TestListSubjectExecuteAction extends Action {
 		List<Subject>subject_list = subjectDao.filter(teacher.getSchool());
 
 		req.setAttribute("subject_list", subject_list);
-
 		req.setAttribute("testList", test_list);
 		req.setAttribute("subject", subject.getName());
 
-
-
-		/*
-		 * 最初に受け取ったデータ(入学年度・クラス・科目)と、
-		 * DBから検索して取得したリストをJSPに渡す(セットアトリビュート)
-		 */
-
         req.setAttribute("class_num", class_num);
         req.setAttribute("subject_cd", subject_cd);
-//        req.setAttribute("student_no", student_no);
         req.setAttribute("school", school);
 
-
+        req.setAttribute("f1", ent_year);
+        req.setAttribute("f2", class_num);
+        req.setAttribute("f3", subject);
 
 		/*
 		 * JSPの表示

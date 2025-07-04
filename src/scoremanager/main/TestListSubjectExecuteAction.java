@@ -75,8 +75,15 @@ public class TestListSubjectExecuteAction extends Action {
 
 
 		TestListSubjectDao testListSubjectDao = new TestListSubjectDao();
-		List<TestListSubject> subject_list = testListSubjectDao.filter(ent_year,class_num,subject,school);
-        req.setAttribute("subject_list", subject_list);
+		List<TestListSubject> test_list = testListSubjectDao.filter(ent_year,class_num,subject,school);
+
+		List<Subject>subject_list = subjectDao.filter(teacher.getSchool());
+
+		req.setAttribute("subject_list", subject_list);
+
+		req.setAttribute("testList", test_list);
+		req.setAttribute("subject", subject.getName());
+
 
 
 		/*

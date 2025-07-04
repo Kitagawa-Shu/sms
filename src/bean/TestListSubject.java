@@ -75,6 +75,9 @@ public class TestListSubject implements Serializable {
 		this.points = points;
 	}
 
+	public String getPoint(int key){
+		return String.valueOf(points.get(key));
+	}
 
 
 

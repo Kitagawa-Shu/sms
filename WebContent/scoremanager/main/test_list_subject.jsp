@@ -93,8 +93,8 @@
 
 	<c:choose>
 
-	<c:when test="${studentList.size()>0 }">
-		<div>科目：${subject } (${timesnum })</div>
+	<c:when test="${testList.size()>0 }">
+		<div>科目：${subject }</div>
 
 		<table class="table table-hover">
 			<tr>
@@ -106,14 +106,14 @@
 				<th>2回</th>
 			</tr>
 
-			<c:forEach var="student" items="${studentList }">
+			<c:forEach var="student" items="${testList }">
 				<tr>
 					<td>${student.entYear }</td>
-					<td>${student.no }</td>
 					<td>${student.classNum }</td>
-					<td>${student.name }</td>
-					<td>${student.one }</td>
-					<td>${student.two }</td>
+					<td>${student.studentNo }</td>
+					<td>${student.studentName }</td>
+					<td>${student.getPoint(1) }</td>
+					<td>${student.getPoint(2) }</td>
 				</tr>
 			</c:forEach>
 		</table>

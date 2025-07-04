@@ -33,18 +33,19 @@ public class SubjectDeleteAction extends Action {
 
         //subjectDaoに検索
         subject = dao.get(subject_cd, teacher.getSchool());
-        
+
 
         //セットリクエストパラメータ
         subject.setCd(subject_cd);
         subject.setName(subject_name);
+
 
         req.setAttribute("subject_cd",subject_cd );
         req.setAttribute("subject_name",subject_name );
 
 
         //科目管理一覧に遷移
-        req.getRequestDispatcher("subject_delete.jsp").forward(req, res);
+        req.getRequestDispatcher("subject_deletea.jsp").forward(req, res);
 
 
 

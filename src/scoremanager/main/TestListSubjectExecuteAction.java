@@ -23,20 +23,23 @@ public class TestListSubjectExecuteAction extends Action {
 
     	HttpSession session = req.getSession();
     	Teacher teacher = (Teacher)session.getAttribute("user");
+    	School school = teacher.getSchool();
+
 
     	//ローカル変数の定義
-    	int ent_year = 0;
-    	String class_num = req.getParameter("class_num");
-    	String subject_cd = req.getParameter("subject_cd");
-    	String student_no = req.getParameter("student_no");
+//    	int ent_year = 0;
+//    	String class_num = req.getParameter("class_num");
+//    	String subject_cd = req.getParameter("subject_cd");
+//    	String student_no = req.getParameter("student_no");
 
 		/*
 		 * 入学年度・クラス・科目の情報をJSPから受け取る
 		 */
-    	ent_year = Integer.parseInt(req.getParameter("f1"));
-    	class_num = req.getParameter("f2");
-    	subject_cd = req.getParameter("f3");
-    	student_no = req.getParameter("f4");
+
+    	int ent_year = Integer.parseInt(req.getParameter("f1"));
+    	String class_num = req.getParameter("f2");
+    	String subject_cd = req.getParameter("f3");
+
     	Map<String, String> errors = new HashMap<>(); // エラーメッセージ
 
 
@@ -53,8 +56,11 @@ public class TestListSubjectExecuteAction extends Action {
 			 * エラーメッセージをリクエストに設定
 			 * エラーがあれば「入学年度とクラスと科目を選択してください」とメッセージを返す
 			 */
-			 errors.put("1", "入学年度とクラスと科目を選択してください");
-				req.setAttribute("errors", errors);
+			errors.put("1", "入学年度とクラスと科目を選択してください");
+			req.setAttribute("errors", errors);
+
+//			req.getRequestDispatcher("test_list_subject.jsp").forward(req, res);
+//            return;
 
 
 			}
@@ -66,14 +72,12 @@ public class TestListSubjectExecuteAction extends Action {
 		SubjectDao subjectDao = new SubjectDao();
 		Subject subject = subjectDao.get(subject_cd,teacher.getSchool());
 
-		School school = teacher.getSchool();
+
 
 		TestListSubjectDao testListSubjectDao = new TestListSubjectDao();
 		List<TestListSubject> subject_list = testListSubjectDao.filter(ent_year,class_num,subject,school);
         req.setAttribute("subject_list", subject_list);
 
-        errors.put("1", "入学年度とクラスと科目を選択してください");
-		req.setAttribute("errors", errors);
 
 		/*
 		 * 最初に受け取ったデータ(入学年度・クラス・科目)と、
@@ -82,7 +86,7 @@ public class TestListSubjectExecuteAction extends Action {
 
         req.setAttribute("class_num", class_num);
         req.setAttribute("subject_cd", subject_cd);
-        req.setAttribute("student_no", student_no);
+//        req.setAttribute("student_no", student_no);
         req.setAttribute("school", school);
 
 

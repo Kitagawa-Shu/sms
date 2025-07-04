@@ -23,22 +23,19 @@ public class SubjectDeleteExecuteAction extends Action {
 
 
         // Subjectオブジェクトを生成
-        SubjectDao dao = new SubjectDao();
+        SubjectDao subjectDao = new SubjectDao();
+        Subject subject = new Subject();
 
-        Subject subject = dao.get(cd,teacher.getSchool());
+        subject = subjectDao.get(cd,teacher.getSchool());
 
-        //subject deleteをよびだす
-        //boolean Subject = dao.delete(subject);
+
 
 
         //削除
         if(subject != null){
-        	dao.delete(subject);
+        	subjectDao.delete(subject);
         	req.getRequestDispatcher("subject_delete_done.jsp").forward(req,res);
 
-
-        } else {
-            req.getRequestDispatcher("subject_delete.jsp").forward(req,res);
         }
 
 

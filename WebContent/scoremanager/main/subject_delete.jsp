@@ -11,6 +11,10 @@
 		<div id="wrap_box">
 			<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2">科目情報削除</h2>
 			<form action="SubjectDeleteExecute.action" method="get">
+
+				<input type="hidden" name="subject_cd" value="${subject_cd }">
+				<input type="hidden" name="subject_name" value="${subject_name }">
+
 					<p>「${subject_name}(${subject_cd})」を削除してもよろしいですか</p>
 					<button class="btn btn-danger" type="submit" value="削除">削除</button>
 

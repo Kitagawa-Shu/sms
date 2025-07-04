@@ -54,7 +54,7 @@ public class TestRegistExecuteAction extends Action {
 				errors.put(no, "0から100の範囲で入力してください");
 				// リクエストにエラーメッセージをセット
 				req.setAttribute("errors", errors);
-				break;
+				continue;
 
 				} else {
 					// studentに学生情報をセット

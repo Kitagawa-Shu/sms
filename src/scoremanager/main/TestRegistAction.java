@@ -84,6 +84,13 @@ public class TestRegistAction extends Action {
 			subject = subjectDao.get(subjectStr, teacher.getSchool());
 
 			tests = testDao.filter( entYear, classNum, subject, num,teacher.getSchool());
+		}else {
+			errors.put("f1", "入学年度を入力してください");
+			errors.put("f2", "クラスを入力してください");
+			errors.put("f3", "科目を入力してください");
+			errors.put("f4", "回数を入力してください");
+			// リクエストにエラーメッセージをセット
+			req.setAttribute("errors", errors);
 		}
 
 

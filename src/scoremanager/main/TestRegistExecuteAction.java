@@ -28,15 +28,16 @@ public class TestRegistExecuteAction extends Action {
 		Teacher teacher = (Teacher)session.getAttribute("user");
 
 		/* ローカル変数の定義 */
+		int count = 0;
+		int test_point = 0;
+		String subject = "";
+		String[] student_no;
 		List<Test> testlist = new ArrayList<Test>();
+
 		TestDao testDao =new TestDao();
 		StudentDao studentDao = new StudentDao();
 		SubjectDao subjectDao = new SubjectDao();
 		Map<String, String> errors = new HashMap<>(); // エラーメッセージ
-		String[] student_no;
-		String subject = "";
-		int count = 0;
-		int test_point = 0;
 
 		/* リクエストパラメータの取得 */
 		subject = req.getParameter("subject");
@@ -70,39 +71,26 @@ public class TestRegistExecuteAction extends Action {
 				}
 		}
 
-
-		if (errors.isEmpty()) { // エラーメッセージがない場合
+		if (errors.isEmpty()) {
+			// エラーメッセージがない場合
 			// 登録完了画面にフォワード
+
 			testDao.save(testlist);
 			req.getRequestDispatcher("test_regist_done.jsp").forward(req, res);
-		} else { // エラーメッセージがある場合
 
-			String entYearStr = "";
+		} else {
+			// エラーメッセージがある場合
+			/* 元の一覧表示のための処理 */
+
 			String classNum = "";
-			String subjectStr = "";
-			String timesNumStr = "";
 			int entYear = 0;
-			int num = 0;
-
 
 			ClassNumDao classNumDao = new ClassNumDao();
 			LocalDate todaysDate = LocalDate.now();
-			List<Test> tests = null;
 			int year = todaysDate.getYear();
-			// リクエストパラメーターの取得 → できない
-//			entYearStr = req.getParameter("f1");
-//			classNum = req.getParameter("f2");
-//			subjectStr = req.getParameter("f3");
-//			timesNumStr = req.getParameter("f4");
 
 			entYear = studentDao.get(student_no[0]).getEntYear();
 			classNum = studentDao.get(student_no[0]).getClassNum();
-
-
-			System.out.println("debug-entYearStr:" + entYearStr);
-			System.out.println("debug-classNum:" + classNum);
-			System.out.println("debug-subjectStr:" + subjectStr);
-			System.out.println("debug-timesNumStr:" + timesNumStr);
 
 			// 学校コードからクラス番号の一覧を取得
 			List<String> list = classNumDao.filter(teacher.getSchool());
@@ -120,39 +108,19 @@ public class TestRegistExecuteAction extends Action {
 			List<Integer> testNumList = Arrays.asList(1, 2);
 
 
-//			if (entYearStr != null) {
-//				// 数値に変換
-//				entYear = Integer.parseInt(entYearStr);
-//			}
+			Subject subject2 = subjectDao.get(subject, teacher.getSchool());
 
-			/* timesNumStrをnumに数値変換して代入 */
-//			if (timesNumStr != null) {
-//				num = Integer.parseInt(timesNumStr);
-//			}
+			testlist = testDao.filter( entYear, classNum, subject2, count,teacher.getSchool());
 
-
-//			if (entYear !=0 && !classNum.equals("0") && subjectList !=null && testNumList !=null ) {
-				/* subjectを1件取得する */
-				Subject subject2 = subjectDao.get(subject, teacher.getSchool());
-
-
-
-				testlist = testDao.filter( entYear, classNum, subject2, count,teacher.getSchool());
-//			}
-
-			System.out.println("debug:testlist:" + testlist.isEmpty());
-
-			/* 元の一覧表示のための処理 */
-			req.setAttribute("f1", entYearStr);
+			req.setAttribute("f1", entYear);
 			req.setAttribute("f2", classNum);
-			req.setAttribute("f3", subjectStr);
-			req.setAttribute("f4", timesNumStr);
-
+			req.setAttribute("f3", subject);
+			req.setAttribute("f4", count);
 
 			req.setAttribute("class_num_set", list);
 			req.setAttribute("ent_year_set", entYearSet);
-			req.setAttribute("subject_set", subjectList); // ★ 科目一覧
-			req.setAttribute("times_num_set", testNumList);     // ★ テスト回数
+			req.setAttribute("subject_set", subjectList);
+			req.setAttribute("times_num_set", testNumList);
 			req.setAttribute("tests", testlist);
 
 

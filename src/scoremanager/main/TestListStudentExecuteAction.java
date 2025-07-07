@@ -10,6 +10,7 @@ import bean.School;
 import bean.Student;
 import bean.Teacher;
 import bean.TestListStudent;
+import dao.StudentDao;
 import dao.TestListStudentDao;
 import tool.Action;
 
@@ -38,8 +39,8 @@ public class TestListStudentExecuteAction extends Action {
         }
 
         // 学生情報
-        Student student = new Student();
-        student.setNo(studentNo);
+        StudentDao studentDao = new StudentDao();
+        Student student=studentDao.get(studentNo);
 
         // 科目
         //SubjectDao subjectDao = new SubjectDao();

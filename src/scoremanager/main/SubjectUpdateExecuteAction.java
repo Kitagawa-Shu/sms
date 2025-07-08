@@ -1,6 +1,6 @@
-	package scoremanager.main;
+package scoremanager.main;
 
-	import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -9,57 +9,52 @@ import bean.Teacher;
 import dao.SubjectDao;
 import tool.Action;
 
-	public class SubjectUpdateExecuteAction extends Action {
+public class SubjectUpdateExecuteAction extends Action {
 
-	    @SuppressWarnings("null")
-		@Override
-	    public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+    @Override
+    public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-	        // セッションからログイン中の教員情報を取得
-	        HttpSession session = req.getSession();
-	        Teacher teacher = (Teacher) session.getAttribute("user");
-
-	        // リクエストパラメータ（科目コードとクラス名）を取得
-	        String subject_cd = req.getParameter("cd");
-	        String subject_name = req.getParameter("name");
-
-	        // DAOの生成
-	        SubjectDao subjectDao = new SubjectDao();
-
-	        // 該当の科目情報を取得（存在すれば編集、なければ新規）
-	        Subject subject = new Subject();
-	        if (subject_cd != null && !subject_cd.isEmpty()) {
-	        	subject.setCd(subject_cd);
-				subject.setName(subject_name);
-				subject.setSchool(teacher.getSchool());
-
-				// saveメソッドで情報を登録
-				subjectDao.save(subject);
-	        }
-
-	        // 科目情報を画面に渡す
-	        if (subject != null) {
-	        	req.setAttribute("cd", subject.getCd());
-	            req.setAttribute("name", subject.getName());
-	            req.setAttribute("school", subject.getSchool());
-	        } else {
-	            req.setAttribute("cd", "");
-	            req.setAttribute("name", "");
-
-	        }
-
-	        // クラス名も渡す（必要なら）
-	        req.setAttribute("cd", subject_cd);
-	        req.setAttribute("name", subject_name);
-
-	        // 科目登録画面へフォワード
-	        req.getRequestDispatcher("subject_create_done.jsp").forward(req, res);
-	   }
-	}
+        // セッションの取得とnullチェック
+        HttpSession session = req.getSession(false);
 
 
+        // ユーザー情報の取得とnullチェック
+        Teacher teacher = (Teacher) session.getAttribute("user");
+
+        // パラメータ取得
+        String subject_cd = req.getParameter("cd");
+        String subject_name = req.getParameter("name");
 
 
+        // 文字数チェック
+        if (subject_name.length() > 20) {
+            Subject s = new Subject();
+            s.setCd(subject_cd);
+            s.setName(subject_name);
+            s.setSchool(teacher.getSchool());
+            req.setAttribute("subject", s);
+            req.getRequestDispatcher("subject_update.jsp").forward(req, res);
+            return;
+        }
 
+        // 更新処理
+        Subject subject = new Subject();
+        subject.setCd(subject_cd);
+        subject.setName(subject_name);
+        subject.setSchool(teacher.getSchool());
 
+        SubjectDao subjectDao = new SubjectDao();
+        boolean success = subjectDao.save(subject); // saveがbooleanを返す想定
 
+        if (!success) {
+            req.setAttribute("error", "科目情報の更新に失敗しました。");
+            req.setAttribute("subject", subject);
+            req.getRequestDispatcher("subject_update.jsp").forward(req, res);
+            return;
+        }
+
+        // 正常完了時
+        req.setAttribute("subject", subject);
+        req.getRequestDispatcher("subject_update_done.jsp").forward(req, res);
+    }
+}

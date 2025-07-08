@@ -7,13 +7,6 @@
   <c:param name="content">
     <section>
 
-      <!-- 🔽 エラーメッセージ表示 -->
-      <c:if test="${not empty error}">
-        <p style="color: orange; font-weight: bold;">
-          <c:out value="${error}" />
-        </p>
-      </c:if>
-
       <form action="SubjectUpdateExecute.action" method="post">
         <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">
           科目情報変更

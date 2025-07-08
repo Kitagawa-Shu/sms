@@ -6,51 +6,56 @@
   <c:param name="scripts"></c:param>
   <c:param name="content">
     <section>
-      <form action="SubjectListException.action" method="get">
-        <!-- 画面設計書の① -->
+
+      <!-- 🔽 エラーメッセージ表示 -->
+      <c:if test="${not empty error}">
+        <p style="color: orange; font-weight: bold;">
+          <c:out value="${error}" />
+        </p>
+      </c:if>
+
+      <form action="SubjectUpdateExecute.action" method="post">
         <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">
           科目情報変更
         </h2>
 
-        <div>
-          <!-- 画面設計書② -->
+        <!-- 科目コード -->
+        <div class="mb-3">
           <label for="cd">科目コード</label>
-          <!-- 画面設計書③ -->
           <input
-            class="border border-0 ps-3"
+            class="form-control-plaintext ps-3"
             type="text"
             id="cd"
             name="cd"
-            value="${cd}"
+            value="<c:out value='${subject != null ? subject.cd : ""}'/>"
             readonly
           />
         </div>
 
-        <!-- 画面設計書④ -->
-        <div>
-          <label for="name">科目名</label><br />
-          <!-- 画面設計書⑤ -->
+        <!-- 科目名 -->
+        <div class="mb-3">
+          <label for="name">科目名</label>
           <input
             class="form-control"
             type="text"
             id="name"
             name="name"
-            value="${name}"
+            value="<c:out value='${subject != null ? subject.name : ""}'/>"
             required
             maxlength="20"
           />
         </div>
 
-        <div class="mx-auto py-2">
-          <!-- 画面設計書⑥ -->
-          <button class="btn btn-secondary" id="login" name="login">
-            変更
-          </button>
+        <!-- 変更ボタン -->
+        <div class="text-center py-2">
+          <button class="btn btn-secondary" id="login" name="login">変更</button>
         </div>
       </form>
 
-      <!-- 画面設計書⑦ -->
-      <a href="SubjectUpdate.action">戻る</a>
+      <!-- 戻るリンク -->
+      <div class="mt-2">
+        <a href="SubjectList.action">戻る</a>
+      </div>
     </section>
   </c:param>
 </c:import>

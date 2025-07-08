@@ -50,7 +50,7 @@ public class TestListStudentDao extends Dao {
             "FROM test AS t "+
             "JOIN subject AS s ON t.subject_cd = s.cd "+
             "WHERE t.student_no = ? "+
-            "ORDER BY t.no ";
+            "ORDER BY s.cd, t.no ";
 
         try (
             Connection con = getConnection();

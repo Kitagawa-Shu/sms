@@ -72,7 +72,7 @@
 			<form action="TestRegistExecute.action" method="get">
 			<c:choose>
 				<c:when test="${not empty tests }">
-					<div>科目：${subject_name} (${f4})</div>
+					<div>科目：${subject_name} (${f4}回)</div>
 					<input type="hidden" name="count" value="${f4}">
 					<input type="hidden" name="subject" value="${f3}">
 					<table class="table table-hover">

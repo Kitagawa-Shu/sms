@@ -79,17 +79,14 @@ public class TestRegistAction extends Action {
 		}
 
 
-		if (entYear !=0 && !classNum.equals("0") && subjectList !=null && testNumList !=null ) {
+		if (entYear !=0 && !classNum.equals("0") && !subjectStr.equals("0") && num !=0 ) {
 			/* subjectを1件取得する */
 			subject = subjectDao.get(subjectStr, teacher.getSchool());
-
+			String subject_name = subjectDao.get(subjectStr,teacher.getSchool()).getName();
+			req.setAttribute("subject_name", subject_name);
 			tests = testDao.filter( entYear, classNum, subject, num,teacher.getSchool());
 		}else {
-			errors.put("f1", "入学年度を入力してください");
-			errors.put("f2", "クラスを入力してください");
-			errors.put("f3", "科目を入力してください");
-			errors.put("f4", "回数を入力してください");
-			// リクエストにエラーメッセージをセット
+			errors.put("a", "入学年度とクラスと科目と回数を選択してください");
 			req.setAttribute("errors", errors);
 		}
 
@@ -104,7 +101,8 @@ public class TestRegistAction extends Action {
 		req.setAttribute("class_num_set", list);
 		req.setAttribute("ent_year_set", entYearSet);
 		req.setAttribute("subject_set", subjectList); // ★ 科目一覧
-		req.setAttribute("times_num_set", testNumList);     // ★ テスト回数
+		req.setAttribute("times_num_set", testNumList); // ★ テスト回数
+
 		req.setAttribute("tests", tests);
 
 

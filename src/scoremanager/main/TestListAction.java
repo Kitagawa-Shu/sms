@@ -2,7 +2,9 @@ package scoremanager.main;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -108,6 +110,17 @@ public class TestListAction extends Action {
         req.setAttribute("ent_year_set", entYearSet);
         req.setAttribute("class_num_set", list);
         req.setAttribute("subject_list", subject_list);
+
+    	Map<String,String>errors = new HashMap<>();
+
+        /* errorがあるか確認する */
+        String error = (String)req.getAttribute("errors");
+        System.out.println("TestListAction_error:" + error);
+        if(error != null  ){
+        	errors.put("1", error);
+        }
+
+        req.setAttribute("errors", errors);
 
         // 成績リストをセット
         req.setAttribute("test_list_student", test_list);

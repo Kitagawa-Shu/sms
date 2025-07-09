@@ -54,6 +54,7 @@
                         <button class="btn btn-secondary" type="submit">検索</button>
                     </div>
 
+					<div class ="me-2 text-warnig">${errors.get("1")}</div>
 
 
 					</div>

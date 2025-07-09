@@ -44,9 +44,7 @@
                         <select class="form-select" id="student-f3-select" name="f3">
                             <option value="">--------</option>
                             <c:forEach var="subject" items="${subject_list}">
-                                <option value="${subject.cd}" <c:if test="${subject.cd == f3}">selected</c:if>>
-                                    ${subject.name}
-                                </option>
+                                <option value="${subject.cd}" <c:if test="${subject.cd == f3}">selected</c:if>>${subject.name}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -54,9 +52,7 @@
                     <div class="col-2 text-center">
                         <button class="btn btn-secondary" type="submit">検索</button>
                     </div>
-
-
-
+					<div class="mt-2 text-warning">${errors.get("b")}</div>
 					</div>
                 </form>
 

@@ -71,7 +71,6 @@ public class TestListSubjectExecuteAction extends Action {
 			errors = "入学年度とクラスと科目を選択してください";
 			req.setAttribute("errors", errors);
 
-			System.out.println("TestListSubjectExcecuteAction_errors:" + errors);
 
 //			req.getRequestDispatcher("test_list_subject.jsp").forward(req, res);
 //            return;
